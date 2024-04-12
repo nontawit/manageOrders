@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import './Orders.css';
 
 function Orders(){
     const [orders, setOrders] = useState([]);
@@ -21,7 +22,29 @@ function Orders(){
             <ul>
                 {orders.map(order => (
                     <li key={order._id}>
-                        Name: {order.cusName}
+                        <div className="Container">
+                            <div>
+                                ชื่อลูกค้า: {order.cusName}
+                            </div>
+                            <div>
+                                ที่อยู่: {order.cusAddress}
+                            </div>
+                            <div>
+                                เบอร์โทร: {order.cusPhone}
+                            </div>
+                            <div>
+                                จำนวน: {order.orderUnit} ชุด
+                            </div>
+                            <div>
+                                วันที่รับออเดอร์: {order.orderDate}
+                            </div>
+                            <div>
+                                วันที่ส่ง: {order.dateDelivery}
+                            </div>
+                            <div>
+                                สถานะ: {order.orderStatus}
+                            </div>
+                        </div>
                     </li>
                 ))}
             </ul>
