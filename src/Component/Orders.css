@@ -1,12 +1,8 @@
-.container{
-    margin-top: 1cm;
-}
-
 .cardOrders{
     margin: auto;
     width: 18rem;
 }
 
-.carouselItem{
-    height: 18rem;
+.Container{
+    margin-top: 1cm;
 }
