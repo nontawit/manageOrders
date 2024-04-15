@@ -1,8 +1,14 @@
 .cardOrders{
     margin: auto;
     width: 18rem;
+    padding: 1rem;
 }
 
 .Container{
     margin-top: 1cm;
+}
+
+.cardFooter{
+    font-size: .7rem;
+    text-align: right;
 }

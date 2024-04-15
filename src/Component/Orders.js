@@ -31,6 +31,8 @@ function Orders(){
                         <p>{order.orderUnit} ชุด</p>
                         <p> ส่ง: {order.dateDelivery}</p>
                         <p>สถานะ: {order.orderStatus}</p>
+                        <p><Button>จัดการออเดอร์</Button></p>
+                        <footer className="cardFooter">สร้าง {order.orderDate}</footer>
                     </Card>
                 </div>
             ))}
