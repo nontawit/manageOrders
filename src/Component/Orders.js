@@ -24,7 +24,7 @@ function Orders(){
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>Loading Data...</div>
     }
 
     return(
