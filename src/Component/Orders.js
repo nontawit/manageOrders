@@ -28,7 +28,7 @@ function Orders(){
     }
 
     return(
-        <div>
+        <div className="Page">
            <h1>Show Orders</h1>
             {orders.map(order => (
                 <div className="Container">
