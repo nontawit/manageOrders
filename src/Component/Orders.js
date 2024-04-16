@@ -8,17 +8,24 @@ import {
 
 function Orders(){
     const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         axios.get('https://restapi-tjap.onrender.com/api/orders')
         .then(response => {
             setOrders(response.data);
+            setLoading(false);
             console.log(setOrders);
         })
         .catch(error => {
             console.log('Error fetching order: ', error);
+            setLoading(false);
         });
     }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return(
         <div>
