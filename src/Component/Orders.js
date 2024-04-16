@@ -24,7 +24,14 @@ function Orders(){
     }, []);
 
     if (loading) {
-        return <div>Loading Data...</div>
+        return (
+            <div className="conLoad">
+                <div className="loader">
+                    Loading
+                    <span></span>
+                </div>
+            </div>
+        )
     }
 
     return(
