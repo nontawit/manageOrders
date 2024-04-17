@@ -37,8 +37,8 @@ function Orders(){
     return(
         <div className="Page">
            <h1>Show Orders</h1>
-            {orders.map(order => (
-                <div className="Container">
+            <div className="Container">
+                {orders.map(order => (
                     <Card key={order._id} className="cardOrders">
                         <h3>ลูกค้า: {order.cusName}</h3>
                         <p>ที่อยู่: {order.cusAddress}</p>
@@ -48,8 +48,8 @@ function Orders(){
                         <p><Button>จัดการออเดอร์</Button></p>
                         <footer className="cardFooter">สร้าง {order.orderDate}</footer>
                     </Card>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
     )
 }
