@@ -51,6 +51,18 @@ h1{
 .cardFooter{
     font-size: .7rem;
     text-align: right;
+    margin-top: .5cm;
+}
+
+.btnConfig, .btnConfig:hover{
+    background: transparent;
+    color: #fff000;
+    border-color: #fff000;
+}
+
+.conBtnConfig{
+    display: flex;
+    justify-content: center;
 }
 
 /* Loader */

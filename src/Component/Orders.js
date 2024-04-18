@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import './Orders.css';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import { 
     Card,
     Button,
@@ -45,7 +46,12 @@ function Orders(){
                         <p>{order.orderUnit} ชุด</p>
                         <p> ส่ง: {order.dateDelivery}</p>
                         <p>สถานะ: {order.orderStatus}</p>
-                        <p><Button>จัดการออเดอร์</Button></p>
+                        <div className="conBtnConfig">
+                            <Button variant="outlined" className="btnConfig">
+                                <SettingsOutlinedIcon/>
+                                จัดการ
+                            </Button>
+                        </div>
                         <footer className="cardFooter">สร้าง {order.orderDate}</footer>
                     </Card>
                 ))}
