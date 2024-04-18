@@ -73,6 +73,7 @@ function Orders() {
                         <h3>ลูกค้า: {order.cusName}</h3>
                         <p>ที่อยู่: {order.cusAddress}</p>
                         <p>{order.orderUnit} ชุด</p>
+                        <p>ติดต่อ: {order.cusPhone}</p>
                         <p> ส่ง: {order.dateDelivery}</p>
                         <p>สถานะ: {order.orderStatus}</p>
                         <div className="conBtnConfig">
