@@ -13,45 +13,39 @@ h1{
 .Page{
     background-color: #3c3c3c;
     padding: 2rem; 
-    height: 100vh;
+    height: 100%;
     width: 100vw;
+
 }
 
-.Container{
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    margin-top: 1cm;
-    
+
+@media screen and (min-width: 992px) {
+    .Container{
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-top: 2rem;
+    }
+}
+
+
+@media screen and (max-width: 767px) {
+    .Container{
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+        justify-items: center;
+        margin-top: 2rem;
+    }
 }
 
 .cardOrders{
-    margin: 1rem;
+    /* margin: 1rem; */
     width: 18rem;
     padding: 1rem;
     background-color: #3c3c3c;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
-}
-
-@media (max-width:768px){
-    .Page{
-        height: 100%;
-    }
-    .Container{
-        grid-template-columns: repeat(2,1fr);
-        margin: auto;
-    }
-}
-
-@media (max-width:480px){
-    .Page{
-        height: 100%;
-        width: 100%;
-    }
-    .Container{
-        grid-template-columns: repeat(1,1fr);
-        margin: auto;
-    }
 }
 
 .cardFooter{
