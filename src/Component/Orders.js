@@ -23,6 +23,7 @@ function Orders() {
             console.log('Error fetching order: ', error);
             setLoading(false);
         });
+        
     }, []);
 
     if (loading) {
@@ -37,38 +38,45 @@ function Orders() {
     }
 
     const handleShowPopup = (order) => {
-        setShowPopup(true); 
-        setSelectedOrder(order); // เก็บ order ที่ถูกเลือกไว้
+        setShowPopup(true);
+        setSelectedOrder(order);
     }
+    
+    // เมื่อต้องการซ่อน popup
     const handleClosePopup = () => {
-        setShowPopup(false); 
+        setShowPopup(false);
     }
+    
 
     const pendingOrders = orders.filter(order => order.orderStatus === 'รอดำเนินการ');
 
     const handleFinishOrder = async () => {
         try {
-            // ส่งคำร้องขอแก้ไขฟิลด์ orderStatus ไปยัง API
-            await axios.put(`https://restapi-tjap.onrender.com/api/orders/${selectedOrder._id}`, {
-                orderStatus: 'เสร็จสิ้น'
-            });
-
-            // อัปเดต orders ใหม่โดยไม่รวม order ที่เป็นเสร็จสิ้นแล้ว
-            setOrders(prevOrders => prevOrders.filter(order => order._id !== selectedOrder._id));
-            
-            // ปิด popup
-            setShowPopup(false);
+            if (selectedOrder) {
+                await axios.put(`https://restapi-tjap.onrender.com/api/orders/${selectedOrder._id}`, {
+                    orderStatus: 'เสร็จสิ้น'
+                });
+    
+                setOrders(prevOrders => prevOrders.map(order => {
+                    if (order._id === selectedOrder._id) {
+                        return { ...order, orderStatus: 'เสร็จสิ้น' };
+                    }
+                    return order;
+                }));
+    
+                setShowPopup(false);
+            }
         } catch (error) {
             console.error('Error finishing order:', error);
-            // แสดงข้อผิดพลาดหรือดำเนินการเพิ่มเติมตามความเหมาะสม
         }
     }
 
     return (
         <div className="Page">
-            <h1>Show Orders</h1>
+            <h1>ออเดอร์ทั้งหมด</h1>
             <div className="Container">
-                {pendingOrders.map(order => (
+                {pendingOrders.length > 0 ? (
+                    pendingOrders.map(order => (
                     <Card key={order._id} className="cardOrders">
                         <h3>ลูกค้า: {order.cusName}</h3>
                         <p>ที่อยู่: {order.cusAddress}</p>
@@ -83,10 +91,14 @@ function Orders() {
                             </Button>
                         </div>
                     </Card>
-                ))}
+                )) 
+            ) : (
+                <p><h1>- ยังไม่มีออเดอร์ -</h1></p>
+            )}
+                {}
             </div>
             {showPopup && (
-                <div className="popup" onClick={handleClosePopup}>
+                <div className="popup show-popup" onClick={handleClosePopup}>
                     <Card className="popup-content">
                         <h2>ต้องการจัดการออเดอร์อย่างไร</h2>
                         <div className="conBtnSubConfig">
