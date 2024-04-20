@@ -2,10 +2,17 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import './Orders.css';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import FactCheckOutlinedIcon from '@mui/icons-material/FactCheckOutlined';
 import { 
     Card,
     Button,
 } from 'react-bootstrap';
+import Popup from './Popup'; // import Popup Component
 
 function Orders() {
     const [orders, setOrders] = useState([]);
@@ -78,12 +85,34 @@ function Orders() {
                 {pendingOrders.length > 0 ? (
                     pendingOrders.map(order => (
                     <Card key={order._id} className="cardOrders">
-                        <h3>ลูกค้า: {order.cusName}</h3>
-                        <p>ที่อยู่: {order.cusAddress}</p>
-                        <p>{order.orderUnit} ชุด</p>
-                        <p>ติดต่อ: {order.cusPhone}</p>
-                        <p> ส่ง: {order.dateDelivery}</p>
-                        <p>สถานะ: {order.orderStatus}</p>
+                        <Card.Body>
+                            <Card.Title>
+                                <PersonOutlineOutlinedIcon className="customerIcon" sx={{ fontSize: 45 }}/>
+                                <h3>{order.cusName}</h3>
+                            </Card.Title>
+                            <Card.Text className='cardText'>
+                                <div className="textContainer">
+                                    <span><MapOutlinedIcon sx={{ fontSize: 45 }}/> </span>
+                                    <h5>{order.cusAddress}</h5>
+                                </div>
+                                <div className="textContainer">
+                                    <span><ArticleOutlinedIcon sx={{ fontSize: 45 }}/></span> 
+                                    <h5>{order.orderUnit} ชุด</h5>
+                                </div>
+                                <div className="textContainer">
+                                    <span><PhoneAndroidOutlinedIcon sx={{ fontSize: 45 }}/></span> 
+                                    <h5>{order.cusPhone}</h5>
+                                </div>
+                                <div className="textContainer">
+                                    <span><LocalShippingOutlinedIcon sx={{ fontSize: 45 }}/></span> 
+                                    <h5>{order.dateDelivery}</h5>
+                                </div>
+                                <div className="textContainer">
+                                    <span><FactCheckOutlinedIcon sx={{ fontSize: 45 }}/></span> 
+                                    <h5>{order.orderStatus}</h5>
+                                </div>
+                            </Card.Text>
+                        </Card.Body>
                         <div className="conBtnConfig">
                             <Button variant="outlined" className="btnConfig" onClick={() => handleShowPopup(order)}>
                                 <SettingsOutlinedIcon />
@@ -97,17 +126,8 @@ function Orders() {
             )}
                 {}
             </div>
-            {showPopup && (
-                <div className="popup show-popup" onClick={handleClosePopup}>
-                    <Card className="popup-content">
-                        <h2>ต้องการจัดการออเดอร์อย่างไร</h2>
-                        <div className="conBtnSubConfig">
-                            <Button className="btnFinish" onClick={handleFinishOrder}>เสร็จสิ้น</Button>
-                            <Button className="btnEdit" onClick={handleClosePopup}>แก้ไข</Button>  
-                        </div>
-                    </Card>
-                </div>
-            )}
+            {/* แสดง Popup Component เมื่อ showPopup เป็น true */}
+            <Popup show={showPopup} handleClose={handleClosePopup} handleFinishOrder={handleFinishOrder} />
         </div>
     );
 }
