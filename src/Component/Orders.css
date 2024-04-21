@@ -74,9 +74,15 @@ h1{
 }
 
 .btnConfig, .btnConfig:hover{
+    justify-content: center;
     background: transparent;
     color: #fff000;
     border-color: #fff000;
+    align-items: center;
+}
+
+.btnConfig span, .btnConfig span:hover{
+    margin-right: 1rex;
 }
 
 .conBtnConfig{

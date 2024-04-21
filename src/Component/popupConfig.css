@@ -1,4 +1,4 @@
-.popup {
+.popConfig {
     display: none; /* สำหรับการซ่อน popup เริ่มต้น */
     position: fixed;
     top: 50%;
@@ -8,15 +8,16 @@
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    width: 20rem;
+    width: 25rem;
 }
 
-.show-popup {
+.show-popConfig {
     display: block; /* เมื่อต้องการแสดง popup */
 }
 
 
 .popup-content {
+ 
     text-align: center;
     background-color: #3c3c3c;
     border: none;
@@ -27,26 +28,31 @@
     color: #fff000;
 }
 
-/* .conBtnSubConfig{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    margin: auto;
-
-} */
+.conBtnSubConfig{
+    display: flex;
+    margin-top: 3rem;
+}
 
 .btnFinish, .btnFinish:hover{
     background-color: #3c3c3c;
     border-color: #fff000;
     margin-right: 1rem;
     color: #fff000;
-    width: 5rem;
+    justify-content: center;
 }
 
 .btnEdit, .btnEdit:hover{
+    justify-content: center;
     background-color: #3c3c3c;
     border-color: #fff000;
     color: #fff000;
-    width: 5rem;
 }
 
+.conBtnClose{
+    display: flex;
+    justify-content: end;
+}
 
+.btnClose{
+    color: #fff000;
+}
