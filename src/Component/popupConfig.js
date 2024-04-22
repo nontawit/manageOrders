@@ -3,16 +3,16 @@ import "./popupConfig.css";
 import { Button } from "react-bootstrap";
 import PopupEdit from "./popupEdit";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import axios from "axios"; // import axios for HTTP requests
 
 const Popup = ({ show, handleClosePopup, selectedOrder, setShowPopup }) => {
   const [showPopupEdit, setShowPopupEdit] = useState(false);
 
   const handleShowPopupEdit = () => {
-    if (setShowPopup) {
+    if (show) {
         setShowPopupEdit(true);
     }
   };
-
 
   const handleClosePopupEdit = () => {
     setShowPopupEdit(false);
@@ -22,7 +22,8 @@ const Popup = ({ show, handleClosePopup, selectedOrder, setShowPopup }) => {
   const handleFinishOrder = async () => {
     try {
       if (selectedOrder) {
-        // ... (โค้ดสำหรับการอัปเดตสถานะออเดอร์)
+        // ทำการอัปเดตสถานะออเดอร์ที่นี่
+        await axios.put(`https://restapi-tjap.onrender.com/api/orders/${selectedOrder._id}`, { orderStatus: "เสร็จสิ้น" });
         handleClosePopup();
       }
     } catch (error) {
@@ -34,7 +35,6 @@ const Popup = ({ show, handleClosePopup, selectedOrder, setShowPopup }) => {
     return null;
   }
 
- 
   return (
     <div className="popConfig show-popConfig">
         <div className="conBtnClose">        
