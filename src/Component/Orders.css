@@ -49,8 +49,10 @@ h1{
 .cardOrders{
     width: 18rem;
     padding: 1rem;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    border-color: #000000;
+    /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    border-color: #000000; */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.123);
+    border-radius: 20px;
     
 }
 
@@ -85,13 +87,9 @@ h1{
     margin-right: 1rex;
 }
 
-.conBtnConfig{
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-}
 
-/* HTML: <div class="loader"></div> */
+
+/* HTML: <div class="loader"></div>
 .conLoader{
     width: 100vw;
     height: 100vh;
@@ -126,4 +124,174 @@ h1{
   }
   @keyframes l6 {
       100% {inset:0}
+  } */
+
+  /*Loader*/
+  .loader{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;  
   }
+
+  .l {
+    font-weight: bold;
+    font-size: 30px;
+    color: black;
+    opacity: 0;
+    animation: pass 2s ease-in-out infinite;
+    animation-delay: 0.2s;
+    letter-spacing: 0.5em;
+    text-shadow: 2px 2px 3px #919191;
+  }
+  
+  .o {
+    font-weight: bold;
+    font-size: 30px;
+    color: black;
+    opacity: 0;
+    animation: pass 2s ease-in-out infinite;
+    animation-delay: 0.4s;
+    letter-spacing: 0.5em;
+    text-shadow: 2px 2px 3px #919191;
+  }
+  
+  .a {
+    font-weight: bold;
+    font-size: 30px;
+    color: black;
+    opacity: 0;
+    animation: pass 2s ease-in-out infinite;
+    animation-delay: 0.6s;
+    letter-spacing: 0.5em;
+    text-shadow: 2px 2px 3px #919191;
+  }
+  
+  .d {
+    font-weight: bold;
+    font-size: 30px;
+    color: black;
+    opacity: 0;
+    animation: pass 2s ease-in-out infinite;
+    animation-delay: 0.8s;
+    letter-spacing: 0.5em;
+    text-shadow: 2px 2px 3px #919191;
+  }
+  
+  .i {
+    font-weight: bold;
+    font-size: 30px;
+    color: black;
+    opacity: 0;
+    animation: pass 2s ease-in-out infinite;
+    animation-delay: 1s;
+    letter-spacing: 0.5em;
+    text-shadow: 2px 2px 3px #919191;
+  }
+  
+  .n {
+    font-weight: bold;
+    font-size: 30px;
+    color: black;
+    opacity: 0;
+    animation: pass 2s ease-in-out infinite;
+    animation-delay: 1.2s;
+    letter-spacing: 0.5em;
+    text-shadow: 2px 2px 3px #919191;
+  }
+  
+  .g {
+    font-weight: bold;
+    font-size: 30px;
+    color: black;
+    opacity: 0;
+    animation: pass 2s ease-in-out infinite;
+    animation-delay: 1.4s;
+    letter-spacing: 0.5em;
+    text-shadow: 2px 2px 3px #919191;
+  }
+  
+  .d1 {
+    font-weight: bold;
+    font-size: 30px;
+    color: black;
+    opacity: 0;
+    animation: pass1 2s ease-in-out infinite;
+    animation-delay: 1.6s;
+    letter-spacing: 0.5em;
+    text-shadow: 2px 2px 3px #919191;
+  }
+  
+  .d2 {
+    font-weight: bold;
+    font-size: 30px;
+    color: black;
+    opacity: 0;
+    animation: pass1 2s ease-in-out infinite;
+    animation-delay: 2s;
+    letter-spacing: 0.5em;
+    text-shadow: 2px 2px 3px #919191;
+  }
+  
+  @keyframes pass {
+    0% {
+      opacity: 1;
+    }
+  
+    50% {
+      opacity: 0;
+    }
+  
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes pass1 {
+    0% {
+      opacity: 1;
+    }
+  
+    50% {
+      opacity: 0;
+    }
+  
+    100% {
+      opacity: 1;
+    }
+  }
+
+/*Config Button*/
+.conBtnConfig{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.filter {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0.192);
+    cursor: pointer;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.021);
+    transition: all 0.3s;
+  }
+  
+  .filter svg {
+    height: 16px;
+    fill: rgb(77, 77, 77);
+    transition: all 0.3s;
+  }
+  .filter:hover {
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.11);
+    background-color: rgb(59, 59, 59);
+  }
+  .filter:hover svg {
+    fill: white;
+  }
+  
