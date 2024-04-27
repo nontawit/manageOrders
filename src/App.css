@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'SukhumvitSet';
+  src: url('./Fonts/SukhumvitSet.ttf') format('truetype');
+}
+
 .App {
   text-align: center;
 }

@@ -8,12 +8,12 @@ import Swal from "sweetalert2";
 
 const Popup = ({ showPopupConfig, handleClosePopup, selectedOrder, setShowPopup }) => {
   
-  const navigate = useNavigate(); 
+  // const navigate = useNavigate(); 
    
-  const handleEditOrder = () => {
-    navigate("/edit"); // เปลี่ยนเส้นทางไปยัง EditPage component
-    handleClosePopup(); // ปิด PopupConfig
-  };
+  // const handleEditOrder = () => {
+  //   navigate("/edit"); // เปลี่ยนเส้นทางไปยัง EditPage component
+  //   handleClosePopup(); // ปิด PopupConfig
+  // };
 
   const pConfig = () => {
     Swal.fire({
