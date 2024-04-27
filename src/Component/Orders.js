@@ -9,6 +9,7 @@ import PhoneAndroidOutlinedIcon from "@mui/icons-material/PhoneAndroidOutlined";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import { Card, Button } from "react-bootstrap";
+import Swal from "sweetalert2";
 import PopupConfig from "./popupConfig";
 
 function Orders() {
@@ -39,17 +40,51 @@ function Orders() {
     );
   }
 
+  const handleFinishOrder = async () => {
+    try {
+      if (selectedOrder) {
+        // ทำการอัปเดตสถานะออเดอร์ที่นี่
+        await axios.put(`https://restapi-tjap.onrender.com/api/orders/${selectedOrder._id}`, { orderStatus: "เสร็จสิ้น" });
+        // handleClosePopup();
+      }
+    } catch (error) {
+      console.error("Error finishing order:", error);
+    }
+  };
+
+  const popupConfig = (order) => {
+    Swal.fire({
+      title: `ลูกค้า "${order.cusName}"`,
+      text: 'จัดการออเดอร์นี้อย่างไร ?',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "เสร็จสิ้น",
+      denyButtonText: `แก้ไข`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire("ออเดอร์สถานะเสร็จสิ้น !", "", "success");
+        handleFinishOrder();
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+      }
+    });
+  }
+
   const handleShowPopup = (order) => {
     if (order) {
-      setShowPopupConfig(true);
+      popupConfig(order);
       setSelectedOrder(order);
     }
   };
 
-  const handleClosePopup = () => {
-    setShowPopupConfig(false);
-    setSelectedOrder(null);
-  };
+
+
+
+  // const handleClosePopup = () => {
+  //   setShowPopupConfig(false);
+  //   setSelectedOrder(null);
+  // };
 
   const pendingOrders = orders.filter((order) => order.orderStatus === "รอดำเนินการ");
 
@@ -104,7 +139,7 @@ function Orders() {
                 <Button
                   variant="outlined"
                   className="btnConfig"
-                  onClick={() => handleShowPopup(order)}
+                  onClick={() => popupConfig(order)}
                 >
                 <span><SettingsOutlinedIcon sx={{ fontSize: 30 }}/></span>
                   จัดการ
@@ -118,12 +153,12 @@ function Orders() {
           </p>
         )}
       </div>
-      <PopupConfig
+      {/* <PopupConfig
         showPopupConfig={showPopupConfig}
         handleClosePopup={handleClosePopup}
         selectedOrder={selectedOrder}
         setShowPopup={setShowPopupConfig}
-      />
+      /> */}
     </div>
   );
 }
