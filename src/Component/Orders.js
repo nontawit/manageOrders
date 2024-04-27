@@ -75,7 +75,7 @@ function Orders() {
         handleFinishOrder();
       } else if (result.isDenied) {
         // Swal.fire("Changes are not saved", "", "info");
-        handleEditOrder();
+        handleEditOrder(order);
       }
     });
   }
@@ -88,10 +88,9 @@ function Orders() {
   };
 
   
-  const handleEditOrder = () => {
-    navigate("/edit"); // เปลี่ยนเส้นทางไปยัง EditPage component
+  const handleEditOrder = (order) => {
+    navigate("/edit" ,{ state: { order } }); // เปลี่ยนเส้นทางไปยัง EditPage component
   };
-
 
   const pendingOrders = orders.filter((order) => order.orderStatus === "รอดำเนินการ");
 
