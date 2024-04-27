@@ -1,24 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./popupConfig.css";
 import { Button } from "react-bootstrap";
-import PopupEdit from "./popupEdit";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import axios from "axios"; // import axios for HTTP requests
+import Swal from "sweetalert2";
 
-const Popup = ({ show, handleClosePopup, selectedOrder, setShowPopup }) => {
-  const [showPopupEdit, setShowPopupEdit] = useState(false);
-
-  const handleShowPopupEdit = () => {
-    if (show) {
-        setShowPopupEdit(true);
-    }
+const Popup = ({ showPopupConfig, handleClosePopup, selectedOrder, setShowPopup }) => {
+  
+  const navigate = useNavigate(); 
+   
+  const handleEditOrder = () => {
+    navigate("/edit"); // เปลี่ยนเส้นทางไปยัง EditPage component
+    handleClosePopup(); // ปิด PopupConfig
   };
 
-  const handleClosePopupEdit = () => {
-    setShowPopupEdit(false);
-    setShowPopup(false);
-  };
+  const pConfig = () => {
+    Swal.fire({
+      title: 'Error!',
+      text: 'Do you want to continue',
+      icon: 'error',
+      confirmButtonText: 'Cool'
+    })
+  }
 
+ 
   const handleFinishOrder = async () => {
     try {
       if (selectedOrder) {
@@ -31,11 +37,12 @@ const Popup = ({ show, handleClosePopup, selectedOrder, setShowPopup }) => {
     }
   };
 
-  if (!show || !selectedOrder) {
+  if (!showPopupConfig || !selectedOrder) {
     return null;
   }
 
   return (
+    
     <div className="popConfig show-popConfig">
         <div className="conBtnClose">        
             <span><CloseOutlinedIcon className="btnClose" sx={{ fontSize: 30 }} onClick={handleClosePopup} /></span>
@@ -46,18 +53,15 @@ const Popup = ({ show, handleClosePopup, selectedOrder, setShowPopup }) => {
           <Button className="btnFinish" onClick={handleFinishOrder}>
             เสร็จสิ้น
           </Button>
-          <Button className="btnEdit" onClick={handleShowPopupEdit}>
+          <Button className="btnEdit" onClick={() => {
+            // handleEditOrder();
+            pConfig();
+          }} >
             แก้ไข
           </Button>
         </div>
-
-        {showPopupEdit && (
-          <PopupEdit
-            handleClosePopupEdit={handleClosePopupEdit}
-            setShowPopupEdit={setShowPopupEdit}
-            selectedOrder={selectedOrder}
-          />
-        )}
+         
+      
       </div>
     </div>
   );

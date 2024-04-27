@@ -14,7 +14,7 @@ import PopupConfig from "./popupConfig";
 function Orders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopupConfig, setShowPopupConfig] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
@@ -32,24 +32,22 @@ function Orders() {
 
   if (loading) {
     return (
-      <div className="conLoad">
-        <div className="loader">
-          Loading
-          <span></span>
-        </div>
+      <div className="conLoader">
+        <div className="txtLoader">กำลังประมวลผล.....</div>
+        <div className="loader"></div>
       </div>
     );
   }
 
   const handleShowPopup = (order) => {
     if (order) {
-      setShowPopup(true);
+      setShowPopupConfig(true);
       setSelectedOrder(order);
     }
   };
 
   const handleClosePopup = () => {
-    setShowPopup(false);
+    setShowPopupConfig(false);
     setSelectedOrder(null);
   };
 
@@ -57,13 +55,15 @@ function Orders() {
 
   return (
     <div className="Page">
-      <h1>ออเดอร์ทั้งหมด</h1>
+      <div className="header">
+        <h1>ออเดอร์ทั้งหมด</h1>
+      </div>
       <div className="Container">
         {pendingOrders.length > 0 ? (
           pendingOrders.map((order) => (
             <Card key={order._id} className="cardOrders">
               <Card.Body>
-                <Card.Title>
+                <Card.Title className="cTitle">
                   <PersonOutlineOutlinedIcon className="customerIcon" sx={{ fontSize: 45 }} />
                   <h3>{order.cusName}</h3>
                 </Card.Title>
@@ -107,7 +107,6 @@ function Orders() {
                   onClick={() => handleShowPopup(order)}
                 >
                 <span><SettingsOutlinedIcon sx={{ fontSize: 30 }}/></span>
-                  
                   จัดการ
                 </Button>
               </div>
@@ -120,10 +119,10 @@ function Orders() {
         )}
       </div>
       <PopupConfig
-        show={showPopup}
+        showPopupConfig={showPopupConfig}
         handleClosePopup={handleClosePopup}
         selectedOrder={selectedOrder}
-        setShowPopup={setShowPopup}
+        setShowPopup={setShowPopupConfig}
       />
     </div>
   );
