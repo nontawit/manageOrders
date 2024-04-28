@@ -31,6 +31,54 @@ function Orders() {
       });
   }, []);
 
+  const popupDelete = (order) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: false
+    });
+    swalWithBootstrapButtons.fire({
+      title: `ลูกค้า "${order.cusName}"`,
+      text: "ต้องการลบออเดอร์นี้หรือไม่",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "ใช่, ลบออเดอร์!",
+      cancelButtonText: "ไม่, ยกเลิก!",
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        swalWithBootstrapButtons.fire({
+          title: "ลบเสร็จสิ้น!",
+          text: `ลบออเดอร์ "${order.cusName} เรียบร้อย"`,
+          icon: "success"
+        });
+        handleDeleteOrder(order);
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire({
+          title: "ยกเลิก",
+          text: "ยังไม่ต้องการลบออเดอร์นี้ :)",
+          icon: "error"
+        });
+      }
+    });
+  }  
+
+  const handleDeleteOrder = async (order) => {
+    try {
+      await axios.delete(`https://restapi-tjap.onrender.com/api/orders/${order._id}`);
+      console.log('ลบออเดอร์สำเร็จ');
+      navigate("/");
+    } catch (error) {
+      console.error('เกิดข้อผิดพลาดในการลบออเดอร์:', error);
+    }
+  };
+
+
   if (loading) {
     return (
       <div class="loader">
@@ -68,18 +116,19 @@ function Orders() {
       showCancelButton: true,
       showCloseButton: true,
       confirmButtonText: "เสร็จสิ้น",
-      denyButtonText: `แก้ไข`,
-  closeButtonText: "ลบ"
+      denyButtonText: `ลบ`,
+      cancelButtonText: 'แก้ไข'
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {
-        Swal.fire("ออเดอร์สถานะเสร็จสิ้น !", "", "success");
-        handleFinishOrder();
-      } else if (result.isDenied) {
-        // Swal.fire("Changes are not saved", "", "info");
-        handleEditOrder(order);
-      }
-    });
+      if (!result.dismiss) {
+        const action = result.value;
+        if (action === 'cancel') {
+          handleEditOrder(order);
+        } else if (result.isConfirmed) {
+          handleFinishOrder();
+        } else if (result.isDenied) {
+          popupDelete(order);
+    }}});
   }
 
   const handleShowPopup = (order) => {

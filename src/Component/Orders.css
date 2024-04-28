@@ -96,44 +96,9 @@ h1{
     margin-right: 1rex;
 }
 
-
-
-/* HTML: <div class="loader"></div>
-.conLoader{
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;  
+.swal2-actions button {
+  margin-right: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
 }
-
-.txtLoader {
-    color: #514b82;
-    font-size: 20px;
-    margin-bottom: 1rem;
-}
-
-.loader {
-    width: 350px;
-    height: 30px;
-    border-radius: 20px;
-    color: #514b82;
-    border: 2px solid;
-    position: relative;
-  }
-  .loader::before {
-    content: "";
-    position: absolute;
-    margin: 2px;
-    inset: 0 100% 0 0;
-    border-radius: inherit;
-    background: currentColor;
-    animation: l6 2s infinite;
-  }
-  @keyframes l6 {
-      100% {inset:0}
-  } */
 
   /*Loader*/
   .loader{
