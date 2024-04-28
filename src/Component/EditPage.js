@@ -39,7 +39,7 @@ function EditPage() {
           <input type="text" value={order && order.dateDelivery}/>
         </label>
         <button type="submit">บันทึก</button>
-        <button type="submit" onClick={handleCancel}>ยกเลิก</button>
+        <button onClick={handleCancel}>ยกเลิก</button>
       </form>
     </div>
   );

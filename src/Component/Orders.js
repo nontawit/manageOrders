@@ -66,6 +66,7 @@ function Orders() {
       icon: "question",
       showDenyButton: true,
       showCancelButton: true,
+      showCloseButton: true,
       confirmButtonText: "เสร็จสิ้น",
       denyButtonText: `แก้ไข`
     }).then((result) => {
