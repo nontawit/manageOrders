@@ -11,6 +11,10 @@
     border-radius: 5px;
   }
   
+  Button{
+    margin-top: 1rem;
+  }
+  
   .btnCancel{
     background: #000;
   }

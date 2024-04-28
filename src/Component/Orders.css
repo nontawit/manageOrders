@@ -50,12 +50,12 @@ h1{
     }
 }
 
-.cTitle{
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    justify-items: center;
-    align-items: center;
-    justify-content: center;
+.cTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .cardOrders{

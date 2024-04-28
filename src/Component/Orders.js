@@ -31,52 +31,7 @@ function Orders() {
       });
   }, []);
 
-  const popupDelete = (order) => {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: "btn btn-success",
-        cancelButton: "btn btn-danger"
-      },
-      buttonsStyling: false
-    });
-    swalWithBootstrapButtons.fire({
-      title: `ลูกค้า "${order.cusName}"`,
-      text: "ต้องการลบออเดอร์นี้หรือไม่",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "ใช่, ลบออเดอร์!",
-      cancelButtonText: "ไม่, ยกเลิก!",
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        swalWithBootstrapButtons.fire({
-          title: "ลบเสร็จสิ้น!",
-          text: `ลบออเดอร์ "${order.cusName} เรียบร้อย"`,
-          icon: "success"
-        });
-        handleDeleteOrder(order);
-      } else if (
-        /* Read more about handling dismissals below */
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire({
-          title: "ยกเลิก",
-          text: "ยังไม่ต้องการลบออเดอร์นี้ :)",
-          icon: "error"
-        });
-      }
-    });
-  }  
-
-  const handleDeleteOrder = async (order) => {
-    try {
-      await axios.delete(`https://restapi-tjap.onrender.com/api/orders/${order._id}`);
-      console.log('ลบออเดอร์สำเร็จ');
-      navigate("/");
-    } catch (error) {
-      console.error('เกิดข้อผิดพลาดในการลบออเดอร์:', error);
-    }
-  };
+ 
 
 
   if (loading) {
@@ -116,10 +71,26 @@ function Orders() {
       text: "ออเดอร์อยู่ในสถานะเสร็จสิ้น!",
       icon: "success",
       showConfirmButton: false,
-      timer: 1500
+      timer: 2000
     });
     navigate("/");
   }
+
+
+  const handleEditOrder = (order) => {
+    navigate("/edit", { state: { order } });
+    console.log('ไปยังหน้าแก้ไข');
+  };
+  
+
+  const handleShowPopup = (order) => {
+    if (order) {
+      popupConfig(order);
+      setSelectedOrder(order);
+    }
+};
+
+  
 
   const popupConfig = (order) => {
     Swal.fire({
@@ -127,35 +98,23 @@ function Orders() {
       text: 'จัดการออเดอร์นี้อย่างไร ?',
       icon: "question",
       showDenyButton: true,
-      showCancelButton: true,
       showCloseButton: true,
       confirmButtonText: "เสร็จสิ้น",
-      denyButtonText: `ลบ`,
-      cancelButtonText: 'แก้ไข'
+      denyButtonText: "จัดการ",
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (!result.dismiss) {
         const action = result.value;
-        if (action === 'cancel') {
-          handleEditOrder(order);
-        } else if (result.isConfirmed) {
+        console.log("Action value:", action); // ตรวจสอบค่าของ action
+        if (result.isConfirmed) {
           handleFinishOrder();
-        } else if (result.isDenied) {
-          popupDelete(order);
-    }}});
-  }
-
-  const handleShowPopup = (order) => {
-    if (order) {
-      popupConfig(order);
-      setSelectedOrder(order);
-    }
+        } else {
+          handleEditOrder(order);
+        }
+      }
+    });
   };
 
   
-  const handleEditOrder = (order) => {
-    navigate("/edit" ,{ state: { order } }); // เปลี่ยนเส้นทางไปยัง EditPage component
-  };
 
   const pendingOrders = orders.filter((order) => order.orderStatus === "รอดำเนินการ");
 
