@@ -100,12 +100,26 @@ function Orders() {
       if (selectedOrder) {
         // ทำการอัปเดตสถานะออเดอร์ที่นี่
         await axios.put(`https://restapi-tjap.onrender.com/api/orders/${selectedOrder._id}`, { orderStatus: "เสร็จสิ้น" });
-        // handleClosePopup();
-      }
+        popupFinish();
+  
+        console.log('เปลี่ยนสถานะเป็นเสร็จสิ้น');
+        }
+      
     } catch (error) {
       console.error("Error finishing order:", error);
     }
   };
+
+  const popupFinish = () => {
+    Swal.fire({
+      title: "เสร็จสิ้น!",
+      text: "ออเดอร์อยู่ในสถานะเสร็จสิ้น!",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500
+    });
+    navigate("/");
+  }
 
   const popupConfig = (order) => {
     Swal.fire({
