@@ -68,7 +68,8 @@ function Orders() {
       showCancelButton: true,
       showCloseButton: true,
       confirmButtonText: "เสร็จสิ้น",
-      denyButtonText: `แก้ไข`
+      denyButtonText: `แก้ไข`,
+  closeButtonText: "ลบ"
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
