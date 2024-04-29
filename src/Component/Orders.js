@@ -19,16 +19,18 @@ function Orders() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("https://restapi-tjap.onrender.com/api/orders")
-      .then((response) => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get("https://restapi-tjap.onrender.com/api/orders");
         setOrders(response.data);
         setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.log("Error fetching order: ", error);
         setLoading(false);
-      });
+      }
+    };
+  
+    fetchOrders();
   }, []);
 
  
