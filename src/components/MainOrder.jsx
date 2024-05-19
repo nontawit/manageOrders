@@ -21,6 +21,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   borderBottom: 'none',
   fontWeight: 'bold',
   padding: theme.spacing(1),
+  textAlign: 'center', // Center align the text
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -31,7 +32,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const StatusChip = styled('div')(({ status, theme }) => ({
   padding: theme.spacing(0.5, 2),
-  borderRadius: '16px',  // ขอบมน
+  borderRadius: '16px',
   display: 'inline-block',
   color: theme.palette.common.white,
   backgroundColor: status === 'Pending' ? theme.palette.info.main : 
@@ -39,7 +40,7 @@ const StatusChip = styled('div')(({ status, theme }) => ({
                     theme.palette.grey[400],
   textAlign: 'center',
   fontWeight: 'bold',
-  whiteSpace: 'nowrap',  // ป้องกันการขึ้นบรรทัดใหม่
+  whiteSpace: 'nowrap',
 }));
 
 const MainOrder = () => {
@@ -52,7 +53,7 @@ const MainOrder = () => {
   useEffect(() => {
     axios.get('https://restapi-tjap.onrender.com/api/orders')
       .then(response => {
-        const pendingOrders = response.data.filter(order => order.orderStatus === 'รอดำเนินการ');
+        const pendingOrders = response.data.filter(order => order.orderStatus === 'Pending');
         const sortedOrders = pendingOrders.sort((a, b) => parseDate(b.dateDelivery) - parseDate(a.dateDelivery));
         setOrders(sortedOrders);
         setLoading(false);
@@ -65,13 +66,11 @@ const MainOrder = () => {
 
   const handleStatusChange = (id) => {
     // Implement the status change logic here
-    // For example, make an API call to update the order status
     console.log('Change status for order ID:', id);
   };
 
   const handleEdit = (id) => {
     // Implement the edit logic here
-    // For example, navigate to the edit page or open a modal
     console.log('Edit order ID:', id);
   };
 
@@ -101,14 +100,14 @@ const MainOrder = () => {
                   <StyledTableCell>Name</StyledTableCell>
                   <StyledTableCell>Unit</StyledTableCell>
                   <StyledTableCell>Delivery</StyledTableCell>
-                  <StyledTableCell align="center">Status</StyledTableCell>
-                  <StyledTableCell align="center">Action</StyledTableCell>
+                  <StyledTableCell>Status</StyledTableCell>
+                  <StyledTableCell>Action</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {orders.map((order) => (
                   <StyledTableRow key={order.id}>
-                    <StyledTableCell>
+                    <StyledTableCell align="left">
                       <Box>
                         <Typography variant="body1" fontWeight="bold">{order.cusName}</Typography>
                         <Typography variant="body2" color="textSecondary">{order.cusAddress}</Typography>
@@ -116,19 +115,19 @@ const MainOrder = () => {
                     </StyledTableCell>
                     <StyledTableCell>{order.orderUnit}</StyledTableCell>
                     <StyledTableCell>{parseDate(order.dateDelivery).toLocaleDateString()}</StyledTableCell>
-                    <StyledTableCell align="center">
+                    <StyledTableCell>
                       <StatusChip status={order.orderStatus}>
                         {order.orderStatus}
                       </StatusChip>
                     </StyledTableCell>
-                    <StyledTableCell align="center">
-                      <IconButton component="a" href={`tel:${order.cusPhone}`}>
+                    <StyledTableCell>
+                      <IconButton component="a" href={`tel:${order.cusPhone}`} sx={{ margin: '0 4px' }}>
                         <PhoneIphoneTwoTone />
                       </IconButton>
-                      <IconButton onClick={() => handleStatusChange(order.id)}>
+                      <IconButton onClick={() => handleStatusChange(order.id)} sx={{ margin: '0 4px' }}>
                         <DoneTwoTone />
                       </IconButton>
-                      <IconButton onClick={() => handleEdit(order.id)}>
+                      <IconButton onClick={() => handleEdit(order.id)} sx={{ margin: '0 4px' }}>
                         <MoreHorizTwoTone />
                       </IconButton>
                     </StyledTableCell>
