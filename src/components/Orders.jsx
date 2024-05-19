@@ -6,7 +6,9 @@ import {
   TableRow, Typography, CircularProgress, useMediaQuery, useTheme, IconButton
 } from '@mui/material';
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
-import PhoneIcon from '@mui/icons-material/Phone';
+import PhoneIphoneTwoTone from '@mui/icons-material/PhoneIphoneTwoTone';
+import DoneTwoTone from '@mui/icons-material/DoneTwoTone';
+import MoreHorizTwoTone from '@mui/icons-material/MoreHorizTwoTone';
 
 const parseDate = (dateString) => {
   const [day, month, year] = dateString.split('/');
@@ -60,6 +62,18 @@ const Orders = () => {
       });
   }, []);
 
+  const handleStatusChange = (id) => {
+    // Implement the status change logic here
+    // For example, make an API call to update the order status
+    console.log('Change status for order ID:', id);
+  };
+
+  const handleEdit = (id) => {
+    // Implement the edit logic here
+    // For example, navigate to the edit page or open a modal
+    console.log('Edit order ID:', id);
+  };
+
   if (loading) {
     return <CircularProgress />;
   }
@@ -82,7 +96,7 @@ const Orders = () => {
                 <StyledTableCell>Unit</StyledTableCell>
                 <StyledTableCell>Delivery</StyledTableCell>
                 <StyledTableCell align="center">Status</StyledTableCell>
-                <StyledTableCell align="center">Call</StyledTableCell>
+                <StyledTableCell align="center">Action</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -103,7 +117,13 @@ const Orders = () => {
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     <IconButton component="a" href={`tel:${order.cusPhone}`}>
-                      <PhoneIcon />
+                      <PhoneIphoneTwoTone />
+                    </IconButton>
+                    <IconButton onClick={() => handleStatusChange(order.id)}>
+                      <DoneTwoTone />
+                    </IconButton>
+                    <IconButton onClick={() => handleEdit(order.id)}>
+                      <MoreHorizTwoTone />
                     </IconButton>
                   </StyledTableCell>
                 </StyledTableRow>
