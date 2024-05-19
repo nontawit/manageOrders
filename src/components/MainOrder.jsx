@@ -9,11 +9,13 @@ import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
 import PhoneIphoneTwoTone from '@mui/icons-material/PhoneIphoneTwoTone';
 import DoneTwoTone from '@mui/icons-material/DoneTwoTone';
 import MoreHorizTwoTone from '@mui/icons-material/MoreHorizTwoTone';
+import { useNavigate } from 'react-router-dom';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { Link } from 'react-router-dom';
 
 const parseDate = (dateString) => {
   const [day, month, year] = dateString.split('/');
-  return new Date(year - 543, month - 1, day); // year - 543 สำหรับปีพุทธศักราช
+  return new Date(year - 543, month - 1, day); // year - 543 for Buddhist calendar
 };
 
 const theme = createTheme();
@@ -52,6 +54,7 @@ const MainOrder = () => {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('https://restapi-tjap.onrender.com/api/orders')
@@ -77,7 +80,7 @@ const MainOrder = () => {
     if (selectedOrderId) {
       axios.put(`https://restapi-tjap.onrender.com/api/orders/${selectedOrderId}`, { orderStatus: 'Success' })
         .then(response => {
-          // อัพเดตสถานะในตัวแปร orders
+          // Update order status in the orders variable
           const updatedOrders = orders.map(order => {
             if (order.id === selectedOrderId) {
               return { ...order, orderStatus: 'Success' };
@@ -85,7 +88,7 @@ const MainOrder = () => {
             return order;
           });
           setOrders(updatedOrders);
-          // แสดงข้อความยืนยัน
+          // Show confirmation message
           alert('Status updated to Success.');
           window.location.reload();
         })
@@ -101,8 +104,11 @@ const MainOrder = () => {
   };
 
   const handleEdit = (id) => {
-    // Implement the edit logic here
-    console.log('Edit order ID:', id);
+    navigate(`/edit-order/${id}`);
+  };
+
+  const handleAddNewOrder = () => {
+    navigate(`/add-order`);
   };
 
   if (loading) {
@@ -187,6 +193,12 @@ const MainOrder = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {/* Add button */}
+      <Box sx={{ position: 'fixed', bottom: '24px', right: '24px' }}>
+        <IconButton onClick={handleAddNewOrder}>
+          <AddCircleOutlineIcon fontSize="large" />
+        </IconButton>
+      </Box>
     </ThemeProvider>
   );
 };

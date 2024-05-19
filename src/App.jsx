@@ -2,7 +2,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Box, CssBaseline } from '@mui/material';
 import Navbar from './components/Navbar.jsx';
 import MainOrder from './components/MainOrder.jsx'; 
-import Orders from './components/Orders.jsx'; 
+import Orders from './components/Orders.jsx';
+import EditOrder from './components/EditOrder.jsx';
+import AddOrder from './components/AddOrder.jsx';
 
 const App = () => {
   return (
@@ -14,6 +16,8 @@ const App = () => {
           <Routes>
             <Route path="/" element={<MainOrder />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="/edit-order/:id" element={<EditOrder />} />
+            <Route path="/add-order" element={<AddOrder />} />
           </Routes>
         </Box>
       </Box>
