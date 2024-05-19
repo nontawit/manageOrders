@@ -12,7 +12,7 @@ const App = () => {
         <Navbar />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Routes>
-            <Route path="/main-order" element={<MainOrder />} />
+            <Route path="/" element={<MainOrder />} />
             <Route path="/orders" element={<Orders />} />
           </Routes>
         </Box>
