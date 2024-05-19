@@ -1,14 +1,15 @@
-// MainOrder.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
   Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead,
-  TableRow, Typography, CircularProgress, useMediaQuery, useTheme, IconButton
+  TableRow, Typography, CircularProgress, useMediaQuery, useTheme, IconButton,
+  Dialog, DialogTitle, DialogContent, DialogActions, Button
 } from '@mui/material';
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
 import PhoneIphoneTwoTone from '@mui/icons-material/PhoneIphoneTwoTone';
 import DoneTwoTone from '@mui/icons-material/DoneTwoTone';
 import MoreHorizTwoTone from '@mui/icons-material/MoreHorizTwoTone';
+import { Link } from 'react-router-dom';
 
 const parseDate = (dateString) => {
   const [day, month, year] = dateString.split('/');
@@ -47,6 +48,8 @@ const MainOrder = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -65,8 +68,36 @@ const MainOrder = () => {
   }, []);
 
   const handleStatusChange = (id) => {
-    // Implement the status change logic here
-    console.log('Change status for order ID:', id);
+    setSelectedOrderId(id);
+    setOpen(true);
+  };
+
+  const handleConfirm = () => {
+    setOpen(false);
+    if (selectedOrderId) {
+      axios.put(`https://restapi-tjap.onrender.com/api/orders/${selectedOrderId}`, { orderStatus: 'Success' })
+        .then(response => {
+          // อัพเดตสถานะในตัวแปร orders
+          const updatedOrders = orders.map(order => {
+            if (order.id === selectedOrderId) {
+              return { ...order, orderStatus: 'Success' };
+            }
+            return order;
+          });
+          setOrders(updatedOrders);
+          // แสดงข้อความยืนยัน
+          alert('อัพเดทสถานะเป็น Success แล้ว');
+          window.location.reload();
+        })
+        .catch(error => {
+          console.error('Error updating order status:', error);
+          alert('ไม่สามารถอัพเดทสถานะได้');
+        });
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const handleEdit = (id) => {
@@ -124,10 +155,10 @@ const MainOrder = () => {
                       <IconButton component="a" href={`tel:${order.cusPhone}`} sx={{ margin: '0 4px' }}>
                         <PhoneIphoneTwoTone />
                       </IconButton>
-                      <IconButton onClick={() => handleStatusChange(order.id)} sx={{ margin: '0 4px' }}>
+                      <IconButton onClick={() => handleStatusChange(order._id)} sx={{ margin: '0 4px' }}>
                         <DoneTwoTone />
                       </IconButton>
-                      <IconButton onClick={() => handleEdit(order.id)} sx={{ margin: '0 4px' }}>
+                      <IconButton onClick={() => handleEdit(order._id)} sx={{ margin: '0 4px' }}>
                         <MoreHorizTwoTone />
                       </IconButton>
                     </StyledTableCell>
@@ -138,6 +169,24 @@ const MainOrder = () => {
           </TableContainer>
         </Box>
       )}
+      
+      {/* MUI Dialog */}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>ยืนยันการอัพเดทสถานะ?</DialogTitle>
+        <DialogContent>
+          <Typography>
+            ต้องการอัพเดทสถานะออเดอร์เป็น Success หรือไม่?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Close
+          </Button>
+          <Button onClick={handleConfirm} color="primary" variant="contained">
+            Save changes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </ThemeProvider>
   );
 };
