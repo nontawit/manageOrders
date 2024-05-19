@@ -86,12 +86,12 @@ const MainOrder = () => {
           });
           setOrders(updatedOrders);
           // แสดงข้อความยืนยัน
-          alert('อัพเดทสถานะเป็น Success แล้ว');
+          alert('Status updated to Success.');
           window.location.reload();
         })
         .catch(error => {
           console.error('Error updating order status:', error);
-          alert('ไม่สามารถอัพเดทสถานะได้');
+          alert('Unable to update status');
         });
     }
   };
@@ -172,10 +172,10 @@ const MainOrder = () => {
       
       {/* MUI Dialog */}
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>ยืนยันการอัพเดทสถานะ?</DialogTitle>
+        <DialogTitle>Confirm status update?</DialogTitle>
         <DialogContent>
           <Typography>
-            ต้องการอัพเดทสถานะออเดอร์เป็น Success หรือไม่?
+           Do you want to update the order status to Success?
           </Typography>
         </DialogContent>
         <DialogActions>
