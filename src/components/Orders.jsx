@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-  Avatar, Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead,
-  TableRow, Typography, CircularProgress, useMediaQuery, useTheme
+  Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead,
+  TableRow, Typography, CircularProgress, useMediaQuery, useTheme, IconButton
 } from '@mui/material';
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
+import PhoneIcon from '@mui/icons-material/Phone';
 
 const parseDate = (dateString) => {
   const [day, month, year] = dateString.split('/');
@@ -78,31 +79,32 @@ const Orders = () => {
             <TableHead>
               <TableRow>
                 <StyledTableCell>Name</StyledTableCell>
-                <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Unit</StyledTableCell>
                 <StyledTableCell>Delivery</StyledTableCell>
                 <StyledTableCell align="center">Status</StyledTableCell>
+                <StyledTableCell align="center">Call</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {orders.map((order) => (
                 <StyledTableRow key={order.id}>
                   <StyledTableCell>
-                    <Box display="flex" alignItems="center">
-                      <Avatar alt={order.cusName} src="https://via.placeholder.com/150" sx={{ marginRight: 2 }} />
-                      <Box>
-                        <Typography variant="body1" fontWeight="bold">{order.cusName}</Typography>
-                        <Typography variant="body2" color="textSecondary">{order.cusAddress}</Typography>
-                      </Box>
+                    <Box>
+                      <Typography variant="body1" fontWeight="bold">{order.cusName}</Typography>
+                      <Typography variant="body2" color="textSecondary">{order.cusAddress}</Typography>
                     </Box>
                   </StyledTableCell>
-                  <StyledTableCell>{order.cusPhone}</StyledTableCell>
                   <StyledTableCell>{order.orderUnit}</StyledTableCell>
                   <StyledTableCell>{parseDate(order.dateDelivery).toLocaleDateString()}</StyledTableCell>
                   <StyledTableCell align="center">
                     <StatusChip status={order.orderStatus}>
                       {order.orderStatus}
                     </StatusChip>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <IconButton component="a" href={`tel:${order.cusPhone}`}>
+                      <PhoneIcon />
+                    </IconButton>
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
