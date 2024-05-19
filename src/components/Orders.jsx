@@ -1,7 +1,8 @@
+// Orders.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-  Avatar, Box, Paper, Table, TableBody, TableCell, TableHead,
+  Avatar, Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead,
   TableRow, Typography, CircularProgress, useMediaQuery, useTheme
 } from '@mui/material';
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
@@ -15,6 +16,8 @@ const theme = createTheme();
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   borderBottom: 'none',
+  fontWeight: 'bold',
+  padding: theme.spacing(1),
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -28,8 +31,8 @@ const StatusChip = styled('div')(({ status, theme }) => ({
   borderRadius: '16px',  // ขอบมน
   display: 'inline-block',
   color: theme.palette.common.white,
-  backgroundColor: status === 'Pending' ? theme.palette.info.main : 
-                    status === 'Success' ? theme.palette.success.main : 
+  backgroundColor: status === 'รอดำเนินการ' ? theme.palette.info.main : 
+                    status === 'เสร็จสิ้น' ? theme.palette.success.main : 
                     theme.palette.grey[400],
   textAlign: 'center',
   fontWeight: 'bold',
@@ -66,12 +69,12 @@ const Orders = () => {
 
   return (
     <ThemeProvider theme={theme}>
-    <Box sx={{display: 'flex', justifyContent: 'start', mt: 10}}>
-      <Typography variant="h4" gutterBottom>All Orders</Typography>
-    </Box>
-    <Box sx={{display: 'flex', justifyContent: 'center'}}>
-      <Paper sx={{ width: '100%', overflowX: 'auto', mx: 'auto' }}>
-        <Table sx={{ minWidth: 650 }}>
+      <Box sx={{ textAlign: 'center', mb: 2, mt: 10 }}>
+        <Typography variant="h4" gutterBottom>All Orders</Typography>
+      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
+        <TableContainer component={Paper} sx={{ maxWidth: isMobile ? '100%' : '80%' }}>
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 <StyledTableCell>Name</StyledTableCell>
@@ -105,7 +108,7 @@ const Orders = () => {
               ))}
             </TableBody>
           </Table>
-        </Paper>
+        </TableContainer>
       </Box>
     </ThemeProvider>
   );
