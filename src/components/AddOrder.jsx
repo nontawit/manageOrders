@@ -28,7 +28,7 @@ const AddOrder = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 400, margin: 'auto' }}>
+    <Box sx={{ maxWidth: 400, margin: 'auto', mt: 10 }}>
       <Typography variant="h4" sx={{ marginBottom: 2 }}>Add Order</Typography>
       <form onSubmit={handleSubmit}>
         <TextField name="cusName" label="Customer Name" fullWidth sx={{ marginBottom: 1 }} />
