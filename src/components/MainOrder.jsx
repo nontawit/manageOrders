@@ -1,8 +1,14 @@
-// MainOrder.tsx และ Orders.tsx
+// MainOrder.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Avatar, Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, CircularProgress } from '@mui/material';
+import {
+  Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead,
+  TableRow, Typography, CircularProgress, useMediaQuery, useTheme, IconButton
+} from '@mui/material';
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
+import PhoneIphoneTwoTone from '@mui/icons-material/PhoneIphoneTwoTone';
+import DoneTwoTone from '@mui/icons-material/DoneTwoTone';
+import MoreHorizTwoTone from '@mui/icons-material/MoreHorizTwoTone';
 
 const parseDate = (dateString) => {
   const [day, month, year] = dateString.split('/');
@@ -14,6 +20,7 @@ const theme = createTheme();
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   borderBottom: 'none',
   fontWeight: 'bold',
+  padding: theme.spacing(1),
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -27,8 +34,8 @@ const StatusChip = styled('div')(({ status, theme }) => ({
   borderRadius: '16px',  // ขอบมน
   display: 'inline-block',
   color: theme.palette.common.white,
-  backgroundColor: status === 'รอดำเนินการ' ? theme.palette.info.main : 
-                    status === 'เสร็จสิ้น' ? theme.palette.success.main : 
+  backgroundColor: status === 'Pending' ? theme.palette.info.main : 
+                    status === 'Success' ? theme.palette.success.main : 
                     theme.palette.grey[400],
   textAlign: 'center',
   fontWeight: 'bold',
@@ -39,11 +46,13 @@ const MainOrder = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     axios.get('https://restapi-tjap.onrender.com/api/orders')
       .then(response => {
-        const pendingOrders = response.data.filter(order => order.orderStatus === 'Pending');
+        const pendingOrders = response.data.filter(order => order.orderStatus === 'รอดำเนินการ');
         const sortedOrders = pendingOrders.sort((a, b) => parseDate(b.dateDelivery) - parseDate(a.dateDelivery));
         setOrders(sortedOrders);
         setLoading(false);
@@ -53,6 +62,18 @@ const MainOrder = () => {
         setLoading(false);
       });
   }, []);
+
+  const handleStatusChange = (id) => {
+    // Implement the status change logic here
+    // For example, make an API call to update the order status
+    console.log('Change status for order ID:', id);
+  };
+
+  const handleEdit = (id) => {
+    // Implement the edit logic here
+    // For example, navigate to the edit page or open a modal
+    console.log('Edit order ID:', id);
+  };
 
   if (loading) {
     return <CircularProgress />;
@@ -64,35 +85,35 @@ const MainOrder = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
+      <Box sx={{ textAlign: 'center', mb: 2, mt: 10 }}>
         <Typography variant="h4" gutterBottom>Pending Orders</Typography>
       </Box>
-      <Box component="main" sx={{flexGrow: 1, p: 3, position: 'relative'}}>
-        <Paper sx={{ width: '100%', overflowX: 'auto', marginLeft: 'auto' }}>
-          <TableContainer>
-            <Table sx={{ minWidth: 650 }}>
+      {orders.length === 0 ? (
+        <Box sx={{ textAlign: 'center', mt: 4 }}>
+          <Typography variant="h5" color="success">Orders Successfully !!</Typography>
+        </Box>
+      ) : (
+        <Box sx={{ display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
+          <TableContainer component={Paper} sx={{ maxWidth: isMobile ? '100%' : '80%' }}>
+            <Table stickyHeader>
               <TableHead>
                 <TableRow>
-                  <StyledTableCell style={{ width: '20%' }}>Name</StyledTableCell> {/* ปรับความกว้างของช่อง Name */}
-                  <StyledTableCell style={{ width: '15%' }}>Telephone</StyledTableCell> {/* ปรับความกว้างของช่อง Telephone */}
-                  <StyledTableCell style={{ width: '15%' }}>Unit</StyledTableCell> {/* ปรับความกว้างของช่อง Unit */}
-                  <StyledTableCell style={{ width: '20%' }}>Delivery</StyledTableCell> {/* ปรับความกว้างของช่อง Delivery */}
-                  <StyledTableCell align="center" style={{ width: '20%' }}>Status</StyledTableCell> {/* ปรับความกว้างของช่อง Status */}
+                  <StyledTableCell>Name</StyledTableCell>
+                  <StyledTableCell>Unit</StyledTableCell>
+                  <StyledTableCell>Delivery</StyledTableCell>
+                  <StyledTableCell align="center">Status</StyledTableCell>
+                  <StyledTableCell align="center">Action</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {orders.map((order) => (
                   <StyledTableRow key={order.id}>
                     <StyledTableCell>
-                      <Box display="flex" alignItems="center">
-                        <Avatar alt={order.cusName} src="https://via.placeholder.com/150" sx={{ marginRight: 2 }} />
-                        <Box>
-                          <Typography variant="body1" fontWeight="bold">{order.cusName}</Typography>
-                          <Typography variant="body2" color="textSecondary">{order.cusAddress}</Typography>
-                        </Box>
+                      <Box>
+                        <Typography variant="body1" fontWeight="bold">{order.cusName}</Typography>
+                        <Typography variant="body2" color="textSecondary">{order.cusAddress}</Typography>
                       </Box>
                     </StyledTableCell>
-                    <StyledTableCell>{order.cusPhone}</StyledTableCell>
                     <StyledTableCell>{order.orderUnit}</StyledTableCell>
                     <StyledTableCell>{parseDate(order.dateDelivery).toLocaleDateString()}</StyledTableCell>
                     <StyledTableCell align="center">
@@ -100,13 +121,24 @@ const MainOrder = () => {
                         {order.orderStatus}
                       </StatusChip>
                     </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <IconButton component="a" href={`tel:${order.cusPhone}`}>
+                        <PhoneIphoneTwoTone />
+                      </IconButton>
+                      <IconButton onClick={() => handleStatusChange(order.id)}>
+                        <DoneTwoTone />
+                      </IconButton>
+                      <IconButton onClick={() => handleEdit(order.id)}>
+                        <MoreHorizTwoTone />
+                      </IconButton>
+                    </StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
-        </Paper>
-      </Box>
+        </Box>
+      )}
     </ThemeProvider>
   );
 };

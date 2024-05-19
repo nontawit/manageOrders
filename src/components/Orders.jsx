@@ -34,8 +34,8 @@ const StatusChip = styled('div')(({ status, theme }) => ({
   borderRadius: '16px',  // ขอบมน
   display: 'inline-block',
   color: theme.palette.common.white,
-  backgroundColor: status === 'รอดำเนินการ' ? theme.palette.info.main : 
-                    status === 'เสร็จสิ้น' ? theme.palette.success.main : 
+  backgroundColor: status === 'Pending' ? theme.palette.info.main : 
+                    status === 'Success' ? theme.palette.success.main : 
                     theme.palette.grey[400],
   textAlign: 'center',
   fontWeight: 'bold',
