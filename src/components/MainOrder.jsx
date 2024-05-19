@@ -79,11 +79,11 @@ const MainOrder = () => {
           <Table sx={{ minWidth: 650 }}>
             <TableHead>
               <TableRow>
-                <StyledTableCell style={{ width: '20%' }}>Name</StyledTableCell>
-                <StyledTableCell style={{ width: '20%' }}>Telephone</StyledTableCell>
-                <StyledTableCell style={{ width: '20%' }}>Unit</StyledTableCell>
-                <StyledTableCell style={{ width: '20%' }}>Delivery</StyledTableCell>
-                <StyledTableCell style={{ width: '20%' }} align="center">Status</StyledTableCell>
+                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell>Telephone</StyledTableCell>
+                <StyledTableCell>Unit</StyledTableCell>
+                <StyledTableCell>Delivery</StyledTableCell>
+                <StyledTableCell align="center">Status</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
