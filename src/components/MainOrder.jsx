@@ -148,7 +148,7 @@ const MainOrder = () => {
                 {orders.map((order) => (
                   <StyledTableRow key={order.id}>
                     <StyledTableCell align="left">
-                      <Box>
+                      <Box  sx={{ textAlign: 'left'}}>
                         <Typography variant="body1" fontWeight="bold">{order.cusName}</Typography>
                         <Typography variant="body2" color="textSecondary">{order.cusAddress}</Typography>
                       </Box>
