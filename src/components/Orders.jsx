@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
   Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead,
   TableRow, Typography, CircularProgress, useMediaQuery, useTheme, IconButton
 } from '@mui/material';
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
-import { PhoneIphoneTwoTone, MoreHorizTwoTone, AddCircleOutline } from '@mui/icons-material';
-import { useNavigate, Link } from 'react-router-dom';
+import PhoneIphoneTwoTone from '@mui/icons-material/PhoneIphoneTwoTone';
+import MoreHorizTwoTone from '@mui/icons-material/MoreHorizTwoTone';
+import { useNavigate } from 'react-router-dom';
 
 const parseDate = (dateString) => {
   const [day, month, year] = dateString.split('/');
@@ -19,13 +20,26 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   borderBottom: 'none',
   fontWeight: 'bold',
   padding: theme.spacing(1),
-  textAlign: 'center', // Center align the text
+  textAlign: 'center',
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
   },
+}));
+
+const StatusChip = styled('div')(({ status, theme }) => ({
+  padding: theme.spacing(0.5, 2),
+  borderRadius: '16px',
+  display: 'inline-block',
+  color: theme.palette.common.white,
+  backgroundColor: status === 'Pending' ? theme.palette.info.main : 
+                    status === 'Success' ? theme.palette.success.main : 
+                    theme.palette.grey[400],
+  textAlign: 'center',
+  fontWeight: 'bold',
+  whiteSpace: 'nowrap',
 }));
 
 const Orders = () => {
@@ -39,7 +53,8 @@ const Orders = () => {
   useEffect(() => {
     axios.get('https://restapi-tjap.onrender.com/api/orders')
       .then(response => {
-        setOrders(response.data);
+        const sortedOrders = response.data.sort((a, b) => parseDate(b.dateDelivery) - parseDate(a.dateDelivery));
+        setOrders(sortedOrders);
         setLoading(false);
       })
       .catch(error => {
@@ -54,14 +69,7 @@ const Orders = () => {
 
   if (loading) {
     return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <CircularProgress />
       </Box>
     );
@@ -76,73 +84,47 @@ const Orders = () => {
       <Box sx={{ textAlign: 'center', mb: 2, mt: 10 }}>
         <Typography variant="h4" gutterBottom>All Orders</Typography>
       </Box>
-      {orders.length === 0 ? (
-        <Box sx={{ textAlign: 'center', mt: 4 }}>
-          <Typography variant="h5">No orders found</Typography>
-        </Box>
-      ) : (
-        <Box sx={{ display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
-          <TableContainer component={Paper} sx={{ maxWidth: isMobile ? '100%' : '80%' }}>
-            <Table stickyHeader>
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>Name</StyledTableCell>
-                  <StyledTableCell>Unit</StyledTableCell>
-                  <StyledTableCell>Delivery</StyledTableCell>
-                  <StyledTableCell>Status</StyledTableCell>
-                  <StyledTableCell>Action</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {orders.map((order) => (
-                  <StyledTableRow key={order.id}>
-                    <StyledTableCell align="left">
-                      <Box>
-                        <Typography variant="body1" fontWeight="bold">{order.cusName}</Typography>
-                        <Typography variant="body2" color="textSecondary">{order.cusAddress}</Typography>
-                      </Box>
-                    </StyledTableCell>
-                    <StyledTableCell>{order.orderUnit}</StyledTableCell>
-                    <StyledTableCell>{parseDate(order.dateDelivery).toLocaleDateString()}</StyledTableCell>
-                    <StyledTableCell>
-                      <Typography variant="body2" color="textSecondary">{order.orderStatus}</Typography>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <IconButton component="a" href={`tel:${order.cusPhone}`} sx={{ margin: '0 4px' }}>
-                        <PhoneIphoneTwoTone />
-                      </IconButton>
-                      <IconButton onClick={() => handleEdit(order._id)} sx={{ margin: '0 4px' }}>
-                        <MoreHorizTwoTone />
-                      </IconButton>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-      )}
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: 16,
-          right: 16,
-        }}
-      >
-        <IconButton
-          component={Link}
-          to="/add-order"
-          color="primary"
-          sx={{
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.common.white,
-            '&:hover': {
-              backgroundColor: theme.palette.primary.dark,
-            },
-          }}
-        >
-          <AddCircleOutline sx={{ fontSize: 56 }} />
-        </IconButton>
+      <Box sx={{ display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
+        <TableContainer component={Paper} sx={{ maxWidth: isMobile ? '100%' : '80%' }}>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell>Unit</StyledTableCell>
+                <StyledTableCell>Delivery</StyledTableCell>
+                <StyledTableCell>Status</StyledTableCell>
+                <StyledTableCell>Action</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {orders.map((order) => (
+                <StyledTableRow key={order.id}>
+                  <StyledTableCell align="left">
+                    <Box>
+                      <Typography variant="body1" fontWeight="bold">{order.cusName}</Typography>
+                      <Typography variant="body2" color="textSecondary">{order.cusAddress}</Typography>
+                    </Box>
+                  </StyledTableCell>
+                  <StyledTableCell>{order.orderUnit}</StyledTableCell>
+                  <StyledTableCell>{parseDate(order.dateDelivery).toLocaleDateString()}</StyledTableCell>
+                  <StyledTableCell>
+                    <StatusChip status={order.orderStatus}>
+                      {order.orderStatus}
+                    </StatusChip>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <IconButton component="a" href={`tel:${order.cusPhone}`} sx={{ margin: '0 4px' }}>
+                      <PhoneIphoneTwoTone />
+                    </IconButton>
+                    <IconButton onClick={() => handleEdit(order._id)} sx={{ margin: '0 4px' }}>
+                      <MoreHorizTwoTone />
+                    </IconButton>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
     </ThemeProvider>
   );
