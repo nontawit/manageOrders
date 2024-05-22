@@ -1,10 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, TextField, Typography, Box } from '@mui/material';
 import axios from 'axios';
 
 const AddOrder = () => {
-  const handleSubmit = async (event) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const formDataObj = Object.fromEntries(formData.entries());
@@ -14,27 +16,26 @@ const AddOrder = () => {
     const thaiYear = parseInt(dateParts[0]) + 543;
     formDataObj["dateDelivery"] = `${dateParts[2]}/${dateParts[1]}/${thaiYear}`;
 
-    try {
-      // ส่งข้อมูลไปยัง API
-      const response = await axios.post('https://restapi-tjap.onrender.com/api/orders', formDataObj);
-      console.log('Response:', response.data);
-      // ทำการเปลี่ยนหน้าหลังจากบันทึกข้อมูลสำเร็จ
-      window.location.href = '/';
-    } catch (error) {
-      console.error('Error adding order:', error);
-      // แสดงข้อความแจ้งเตือนหากมีข้อผิดพลาดในการบันทึกข้อมูล
-      alert('Failed to add order. Please try again later.');
-    }
+    // ส่งข้อมูลใหม่ไปยัง API
+    axios.post('https://restapi-tjap.onrender.com/api/orders', formDataObj)
+      .then(response => {
+        alert('Order added successfully!');
+        navigate('/');
+      })
+      .catch(error => {
+        console.error('Error adding order:', error);
+        alert('Failed to add order');
+      });
   };
 
   return (
     <Box sx={{ maxWidth: 400, margin: 'auto', mt: 10 }}>
       <Typography variant="h4" sx={{ marginBottom: 2 }}>Add Order</Typography>
       <form onSubmit={handleSubmit}>
-        <TextField name="cusName" label="Customer Name" fullWidth sx={{ marginBottom: 1 }} />
-        <TextField name="cusAddress" label="Customer Address" fullWidth sx={{ marginBottom: 1 }} />
-        <TextField name="cusPhone" label="Customer Phone" fullWidth sx={{ marginBottom: 1 }} />
-        <TextField name="orderUnit" label="Order Unit" fullWidth sx={{ marginBottom: 1 }} />
+        <TextField name="cusName" label="Customer Name" fullWidth sx={{ marginBottom: 1 }} required />
+        <TextField name="cusAddress" label="Customer Address" fullWidth sx={{ marginBottom: 1 }} required />
+        <TextField name="cusPhone" label="Customer Phone" fullWidth sx={{ marginBottom: 1 }} required />
+        <TextField name="orderUnit" label="Order Unit" fullWidth sx={{ marginBottom: 1 }} required />
         <TextField
           name="dateDelivery"
           label="Delivery Date"
@@ -42,9 +43,10 @@ const AddOrder = () => {
           fullWidth
           InputLabelProps={{ shrink: true }}
           sx={{ marginBottom: 2 }}
+          required
         />
-        <Button type="submit" color="success" variant="contained" sx={{ marginRight: 1 }}>Add</Button>
-        <Button variant="outlined" color="warning" component={Link} to="/" sx={{ marginLeft: 1 }}>Cancel</Button>
+        <Button type="submit" variant="contained" sx={{ marginRight: 1 }}>Add</Button>
+        <Button variant="outlined" component={Link} to="/" sx={{ marginLeft: 1 }}>Cancel</Button>
       </form>
     </Box>
   );

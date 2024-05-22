@@ -6,16 +6,12 @@ import {
   Dialog, DialogTitle, DialogContent, DialogActions, Button
 } from '@mui/material';
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
-import PhoneIphoneTwoTone from '@mui/icons-material/PhoneIphoneTwoTone';
-import DoneTwoTone from '@mui/icons-material/DoneTwoTone';
-import MoreHorizTwoTone from '@mui/icons-material/MoreHorizTwoTone';
-import { useNavigate } from 'react-router-dom';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { Link } from 'react-router-dom';
+import { PhoneIphoneTwoTone, DoneTwoTone, MoreHorizTwoTone, AddCircleOutline } from '@mui/icons-material';
+import { useNavigate, Link } from 'react-router-dom';
 
 const parseDate = (dateString) => {
   const [day, month, year] = dateString.split('/');
-  return new Date(year - 543, month - 1, day); // year - 543 for Buddhist calendar
+  return new Date(year - 543, month - 1, day); // year - 543 สำหรับปีพุทธศักราช
 };
 
 const theme = createTheme();
@@ -80,7 +76,7 @@ const MainOrder = () => {
     if (selectedOrderId) {
       axios.put(`https://restapi-tjap.onrender.com/api/orders/${selectedOrderId}`, { orderStatus: 'Success' })
         .then(response => {
-          // Update order status in the orders variable
+          // อัพเดตสถานะในตัวแปร orders
           const updatedOrders = orders.map(order => {
             if (order.id === selectedOrderId) {
               return { ...order, orderStatus: 'Success' };
@@ -88,7 +84,7 @@ const MainOrder = () => {
             return order;
           });
           setOrders(updatedOrders);
-          // Show confirmation message
+          // แสดงข้อความยืนยัน
           alert('Status updated to Success.');
           window.location.reload();
         })
@@ -107,12 +103,19 @@ const MainOrder = () => {
     navigate(`/edit-order/${id}`);
   };
 
-  const handleAddNewOrder = () => {
-    navigate(`/add-order`);
-  };
-
   if (loading) {
-    return <CircularProgress />;
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
@@ -193,10 +196,27 @@ const MainOrder = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      {/* Add button */}
-      <Box sx={{ position: 'fixed', bottom: '24px', right: '24px' }}>
-        <IconButton onClick={handleAddNewOrder}>
-          <AddCircleOutlineIcon fontSize="large" />
+      
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 16,
+          right: 16,
+        }}
+      >
+        <IconButton
+          component={Link}
+          to="/add-order"
+          color="primary"
+          sx={{
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.common.white,
+            '&:hover': {
+              backgroundColor: theme.palette.primary.dark,
+            },
+          }}
+        >
+          <AddCircleOutline sx={{ fontSize: 56 }} />
         </IconButton>
       </Box>
     </ThemeProvider>

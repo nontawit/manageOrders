@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Button, TextField, Typography, Grid } from '@mui/material';
+import { Box, Button, TextField, Typography, CircularProgress, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { SaveTwoTone, DeleteTwoTone, CancelTwoTone } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +21,6 @@ const EditOrder = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // ดึงข้อมูล Order จาก API
     axios.get(`https://restapi-tjap.onrender.com/api/orders/${id}`)
       .then(response => {
         setOrder(response.data);
@@ -64,9 +63,19 @@ const EditOrder = () => {
     navigate('/');
   };
 
-  // แสดงโค้ดฟอร์มเมื่อข้อมูล Order ถูกโหลดเสร็จเรียบร้อยแล้ว
   if (!order) {
-    return <Typography variant="h6">Loading...</Typography>;
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
