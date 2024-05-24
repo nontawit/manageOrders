@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Box, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Paper
+  Box, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Paper, TextField
 } from '@mui/material';
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
 
@@ -9,7 +9,10 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#1976d2',
-    }
+    },
+    background: {
+      default: '#f0f2f5',
+    },
   },
   typography: {
     h4: {
@@ -42,47 +45,55 @@ const FormContainer = styled(Paper)(({ theme }) => ({
   minWidth: '300px',
 }));
 
-const PinCirclesContainer = styled(Box)(({ theme }) => ({
+const PinInputsContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   marginBottom: theme.spacing(2),
 }));
 
-const PinCircle = styled(Box)(({ theme, filled }) => ({
-  width: '16px',
-  height: '16px',
-  margin: theme.spacing(0.5),
-  borderRadius: '50%',
-  backgroundColor: filled ? theme.palette.primary.main : theme.palette.grey[400],
+const PinInput = styled(TextField)(({ theme }) => ({
+  width: '40px',
+  margin: theme.spacing(1),
+  '& input': {
+    textAlign: 'center',
+    padding: theme.spacing(1),
+  },
 }));
 
 const PinLogin = () => {
-  const [pin, setPin] = useState('');
+  const [pin, setPin] = useState(['', '', '', '', '', '']);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const correctPin = '210190';
-  const inputRef = useRef(null);
+  const inputRefs = useRef([]);
 
   useEffect(() => {
-    inputRef.current.focus();
+    inputRefs.current[0].focus();
   }, []);
 
-  const handlePinChange = (e) => {
+  const handlePinChange = (e, index) => {
     const { value } = e.target;
-    if (/^\d*$/.test(value) && value.length <= 6) { // Check if input is a number and not more than 6 digits
-      setPin(value);
+    if (/^\d*$/.test(value) && value.length <= 1) {
+      const newPin = [...pin];
+      newPin[index] = value;
+      setPin(newPin);
+
+      if (value !== '' && index < 5) {
+        inputRefs.current[index + 1].focus();
+      }
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && pin.length === 6) {
-      handleSubmit(e);
+  const handleKeyDown = (e, index) => {
+    if (e.key === 'Backspace' && pin[index] === '' && index > 0) {
+      inputRefs.current[index - 1].focus();
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (pin === correctPin) {
+    const pinString = pin.join('');
+    if (pinString === correctPin) {
       navigate('/main-order');
     } else {
       setOpen(true);
@@ -91,7 +102,8 @@ const PinLogin = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setPin('');
+    setPin(['', '', '', '', '', '']);
+    inputRefs.current[0].focus();
   };
 
   return (
@@ -100,31 +112,32 @@ const PinLogin = () => {
         <FormContainer>
           <Typography variant="h4" gutterBottom>Enter PIN</Typography>
           <Typography variant="subtitle1" gutterBottom>Enter your 6-digit PIN to continue</Typography>
-          <PinCirclesContainer>
-            {[...Array(6)].map((_, index) => (
-              <PinCircle key={index} filled={index < pin.length} />
-            ))}
-          </PinCirclesContainer>
-          <input
-            ref={inputRef}
-            type="tel"
-            value={pin}
-            onChange={handlePinChange}
-            onKeyPress={handleKeyPress}
-            style={{ position: 'absolute', opacity: 0 }}
-            maxLength={6}
-            autoFocus
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={handleSubmit}
-            disabled={pin.length < 6}
-          >
-            Submit
-          </Button>
+          <form onSubmit={handleSubmit}>
+            <PinInputsContainer>
+              {pin.map((digit, index) => (
+                <PinInput
+                  key={index}
+                  value={digit}
+                  onChange={(e) => handlePinChange(e, index)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  inputProps={{
+                    maxLength: 1,
+                    inputMode: 'numeric',
+                  }}
+                  inputRef={(ref) => inputRefs.current[index] = ref}
+                />
+              ))}
+            </PinInputsContainer>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              disabled={pin.includes('')}
+            >
+              Submit
+            </Button>
+          </form>
         </FormContainer>
       </PinContainer>
 
