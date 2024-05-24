@@ -20,10 +20,10 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar sx={{ background: '#1976d2' }}> {/* ปรับพื้นหลังของ AppBar */}
+    <AppBar sx={{ background: '#1976d2', padding: 0 }}> {/* ปรับพื้นหลังของ AppBar */}
       <Toolbar>
         <IconButton
-          size="large"
+          size="small"
           edge="start"
           color="inherit"
           aria-label="menu"
@@ -38,7 +38,7 @@ const Navbar = () => {
           Orders Manager
         </Typography>
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <Button color="inherit" component={Link} to="/">Pending</Button>
+          <Button color="inherit" component={Link} to="/main-order">Pending</Button>
           <Button color="inherit" component={Link} to="/orders">All</Button>
         </Box>
       </Toolbar>
@@ -57,7 +57,7 @@ const Navbar = () => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} component={Link} to="/">Pending</MenuItem>
+        <MenuItem onClick={handleClose} component={Link} to="/main-order">Pending</MenuItem>
         <MenuItem onClick={handleClose} component={Link} to="/orders">All</MenuItem>
       </Menu>
     </AppBar>

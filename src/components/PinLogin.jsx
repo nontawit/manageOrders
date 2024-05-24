@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
-  Box, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Paper, TextField
+  Box, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Paper, TextField
 } from '@mui/material';
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
-import "../App.css";
 
 const theme = createTheme({
   palette: {
@@ -58,16 +57,31 @@ const PinInput = styled(TextField)(({ theme }) => ({
   },
 }));
 
+const correctPin = '210190';
+
 const PinLogin = () => {
   const [pin, setPin] = useState(['', '', '', '', '', '']);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const correctPin = '210190';
+  const location = useLocation();
   const inputRefs = useRef([]);
 
   useEffect(() => {
     inputRefs.current[0].focus();
   }, []);
+
+  useEffect(() => {
+    if (location.pathname !== '/main-order') {
+      setPin(['', '', '', '', '', '']);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    const pinString = pin.join('');
+    if (pinString.length === 6 && pinString === correctPin) {
+      navigate('/main-order');
+    }
+  }, [pin, navigate]);
 
   const handlePinChange = (e, index) => {
     const { value } = e.target;
@@ -88,16 +102,6 @@ const PinLogin = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const pinString = pin.join('');
-    if (pinString === correctPin) {
-      navigate('/main-order');
-    } else {
-      setOpen(true);
-    }
-  };
-
   const handleClose = () => {
     setOpen(false);
     setPin(['', '', '', '', '', '']);
@@ -110,7 +114,7 @@ const PinLogin = () => {
         <FormContainer>
           <Typography variant="h4" gutterBottom>Enter PIN</Typography>
           <Typography variant="subtitle1" gutterBottom>Enter your 6-digit PIN to continue</Typography>
-          <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+          <form style={{ width: '100%' }}>
             <PinInputsContainer>
               {pin.map((digit, index) => (
                 <PinInput
@@ -126,26 +130,16 @@ const PinLogin = () => {
                 />
               ))}
             </PinInputsContainer>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              disabled={pin.includes('')}
-            >
-              Submit
-            </Button>
           </form>
         </FormContainer>
       </PinContainer>
-
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Error</DialogTitle>
         <DialogContent>
           <Typography>Incorrect PIN. Please try again.</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">Close</Button>
+          {/* <Button onClick={handleClose} color="primary">Close</Button> */}
         </DialogActions>
       </Dialog>
     </ThemeProvider>

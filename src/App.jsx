@@ -6,6 +6,7 @@ import Orders from './components/Orders';
 import AddOrder from './components/AddOrder';
 import EditOrder from './components/EditOrder';
 import Navbar from './components/Navbar';
+import "./App.css"
 
 const App = () => {
   return (
