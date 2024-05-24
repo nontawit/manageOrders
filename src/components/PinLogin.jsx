@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Paper
@@ -9,10 +9,7 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#1976d2',
-    },
-    background: {
-      default: '#f0f2f5',
-    },
+    }
   },
   typography: {
     h4: {
@@ -64,6 +61,11 @@ const PinLogin = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const correctPin = '210190';
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const handlePinChange = (e) => {
     const { value } = e.target;
@@ -104,7 +106,8 @@ const PinLogin = () => {
             ))}
           </PinCirclesContainer>
           <input
-            type="password"
+            ref={inputRef}
+            type="tel"
             value={pin}
             onChange={handlePinChange}
             onKeyPress={handleKeyPress}
