@@ -4,15 +4,13 @@ import {
   Box, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Paper, TextField
 } from '@mui/material';
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
+import "../App.css";
 
 const theme = createTheme({
   palette: {
     primary: {
       main: '#1976d2',
-    },
-    background: {
-      default: '#f0f2f5',
-    },
+    }
   },
   typography: {
     h4: {
@@ -29,9 +27,8 @@ const PinContainer = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  height: '100vh',
+  minHeight: '100vh',
   backgroundColor: theme.palette.background.default,
-  padding: theme.spacing(2),
 }));
 
 const FormContainer = styled(Paper)(({ theme }) => ({
@@ -42,7 +39,8 @@ const FormContainer = styled(Paper)(({ theme }) => ({
   boxShadow: theme.shadows[5],
   backgroundColor: theme.palette.background.paper,
   borderRadius: theme.shape.borderRadius,
-  minWidth: '300px',
+  width: '100%',
+  maxWidth: '400px',
 }));
 
 const PinInputsContainer = styled(Box)(({ theme }) => ({
@@ -112,7 +110,7 @@ const PinLogin = () => {
         <FormContainer>
           <Typography variant="h4" gutterBottom>Enter PIN</Typography>
           <Typography variant="subtitle1" gutterBottom>Enter your 6-digit PIN to continue</Typography>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} style={{ width: '100%' }}>
             <PinInputsContainer>
               {pin.map((digit, index) => (
                 <PinInput

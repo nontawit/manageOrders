@@ -21,6 +21,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   fontWeight: 'bold',
   padding: theme.spacing(1),
   textAlign: 'center',
+  margin: 0,
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
