@@ -39,7 +39,7 @@ const FormContainer = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   borderRadius: theme.shape.borderRadius,
   width: '100%',
-  maxWidth: '400px',
+  maxWidth: '300px',
 }));
 
 const PinInputsContainer = styled(Box)(({ theme }) => ({
