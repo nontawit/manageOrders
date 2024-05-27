@@ -46,7 +46,7 @@ const AddOrder = () => {
           required
         />
         <Button type="submit" variant="contained" sx={{ marginRight: 1 }}>Add</Button>
-        <Button variant="outlined" component={Link} to="/main-order" sx={{ marginLeft: 1 }}>Cancel</Button>
+        <Button variant="outlined" component={Link} to="/" sx={{ marginLeft: 1 }}>Cancel</Button>
       </form>
     </Box>
   );
