@@ -10,8 +10,6 @@ const OrderProgress = ({ orders }) => {
   const pendingOrders = orders.filter(order => order.orderStatus === 'Pending');
   const successOrdersCount = orders.filter(order => order.orderStatus === 'Success').length;
   const totalOrdersCount = orders.length;
-  const totalOrderUnits = pendingOrders.reduce((total, order) => total + order.orderUnit, 0);
-
   const successPercentage = totalOrdersCount > 0 ? (successOrdersCount / totalOrdersCount) * 100 : 0;
 
   return (
@@ -26,22 +24,23 @@ const OrderProgress = ({ orders }) => {
       </div>
 
       <div className="flex flex-col items-center justify-center mb-6 w-full">
-        <h3 className="text-lg font-semibold mb-2 text-center">Order Units</h3>
-        <div className="text-2xl font-semibold text-green-600 text-center">
-          {totalOrderUnits} Units
-        </div>
-      </div>
-
-      <div className="flex flex-col items-center justify-center">
         <h3 className="text-lg font-semibold mb-2 text-center">Success Orders</h3>
-        <div className="w-full bg-gray-200 rounded-full h-6 mb-4">
-          <div
-            className="bg-green-500 h-6 rounded-full"
-            style={{ width: `${successPercentage}%` }}
-          ></div>
-        </div>
-        <div className="text-lg font-semibold text-green-600 text-center">
-          {successOrdersCount} / {totalOrdersCount} ({successPercentage.toFixed(2)}%)
+        <div className="w-24 h-24 md:w-48 md:h-48">
+          <CircularProgressbarWithChildren
+            value={successPercentage}
+            styles={buildStyles({
+              textColor: '#38A169',
+              pathColor: '#38A169',
+              trailColor: '#C6F6D5',
+            })}
+          >
+            <div className="text-lg font-semibold text-green-600">
+              {successOrdersCount} / {totalOrdersCount}
+            </div>
+            <div className="text-green-600">
+              {successPercentage.toFixed(2)}%
+            </div>
+          </CircularProgressbarWithChildren>
         </div>
       </div>
     </div>

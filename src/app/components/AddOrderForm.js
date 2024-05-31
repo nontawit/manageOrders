@@ -1,119 +1,102 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
 
 const AddOrderForm = ({ fetchOrders, closeForm }) => {
   const [formData, setFormData] = useState({
     cusName: '',
     cusAddress: '',
     cusPhone: '',
-    orderUnit: 0,
-    dateDelivery: new Date(),
+    orderUnit: '',
+    dateDelivery: '',
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleDateChange = (date) => {
-    setFormData({
-      ...formData,
-      dateDelivery: date,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const convertedDate = moment(formData.dateDelivery).format('DD/MM/YYYY');
-      const newOrder = { ...formData, dateDelivery: convertedDate };
-
-      await axios.post('https://restapi-tjap.onrender.com/api/orders', newOrder);
-      fetchOrders();
-      closeForm();
-    } catch (error) {
-      console.error('Error adding order:', error.message);
-    }
+    // Logic for submitting the form and adding the order
+    fetchOrders();
+    closeForm();
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
+      <div className="bg-white p-6 rounded-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
         <h2 className="text-2xl font-bold mb-4">Add New Order</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700">Customer Name</label>
+            <label htmlFor="cusName" className="block text-sm font-medium text-gray-700">Customer Name</label>
             <input
               type="text"
+              id="cusName"
               name="cusName"
               value={formData.cusName}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
+              className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Address</label>
+            <label htmlFor="cusAddress" className="block text-sm font-medium text-gray-700">Customer Address</label>
             <input
               type="text"
+              id="cusAddress"
               name="cusAddress"
               value={formData.cusAddress}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
+              className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Phone</label>
+            <label htmlFor="cusPhone" className="block text-sm font-medium text-gray-700">Customer Phone</label>
             <input
               type="text"
+              id="cusPhone"
               name="cusPhone"
               value={formData.cusPhone}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
+              className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Order Unit</label>
+            <label htmlFor="orderUnit" className="block text-sm font-medium text-gray-700">Order Unit</label>
             <input
-              type="number"
+              type="text"
+              id="orderUnit"
               name="orderUnit"
               value={formData.orderUnit}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
+              className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Date Delivery (DD/MM/YYYY)</label>
-            <DatePicker
-              selected={formData.dateDelivery}
-              onChange={handleDateChange}
-              dateFormat="dd/MM/yyyy"
-              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <label htmlFor="dateDelivery" className="block text-sm font-medium text-gray-700">Date Delivery (DD/MM/YYYY)</label>
+            <input
+              type="text"
+              id="dateDelivery"
+              name="dateDelivery"
+              value={formData.dateDelivery}
+              onChange={handleChange}
               required
+              className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={closeForm}
-              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2"
-            >
-              Cancel
-            </button>
+          <div className="flex justify-center">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-full mr-2"
             >
               Add Order
+            </button>
+            <button
+              onClick={closeForm}
+              className="bg-gray-500 hover:bg-gray-700 text-white py-2 px-4 rounded-full"
+            >
+              Cancel
             </button>
           </div>
         </form>
