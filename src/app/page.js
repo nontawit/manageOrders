@@ -16,7 +16,7 @@ const Home = () => {
   const fetchOrders = async () => {
     try {
       const response = await axios.get('https://restapi-tjap.onrender.com/api/orders', {
-        timeout: 20000, // เพิ่ม timeout เป็น 20 วินาที
+        timeout: 20000,
       });
       setOrders(response.data);
     } catch (error) {
@@ -27,9 +27,9 @@ const Home = () => {
 
   useEffect(() => {
     fetchOrders();
-    const interval = setInterval(fetchOrders, 60000); // อัปเดตทุก 1 นาที
+    const interval = setInterval(fetchOrders, 60000);
 
-    return () => clearInterval(interval); // ล้าง interval เมื่อ component ถูก unmount
+    return () => clearInterval(interval);
   }, []);
 
   const convertThaiDateToGregorian = (thaiDate) => {
@@ -52,10 +52,11 @@ const Home = () => {
           <OrderTable orders={pendingOrders} fetchOrders={fetchOrders} />
           <div className="flex justify-center mt-4">
             <button 
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full flex items-center"
               onClick={() => setIsFormOpen(true)}
             >
-              <PlusIcon className="h-6 w-6" />
+              <PlusIcon className="h-6 w-6 mr-2" />
+              Add New Order
             </button>
           </div>
         </div>

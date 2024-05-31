@@ -10,7 +10,7 @@ const AddOrderForm = ({ fetchOrders, closeForm }) => {
     cusAddress: '',
     cusPhone: '',
     orderUnit: 0,
-    dateDelivery: new Date(), // ตั้งค่าเริ่มต้นเป็นวันที่ปัจจุบัน
+    dateDelivery: new Date(),
   });
 
   const handleChange = (e) => {
@@ -31,7 +31,7 @@ const AddOrderForm = ({ fetchOrders, closeForm }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const convertedDate = moment(formData.dateDelivery).format('DD/MM/YYYY'); // แปลงวันที่เป็นฟอร์แมต DD/MM/YYYY
+      const convertedDate = moment(formData.dateDelivery).format('DD/MM/YYYY');
       const newOrder = { ...formData, dateDelivery: convertedDate };
 
       await axios.post('https://restapi-tjap.onrender.com/api/orders', newOrder);
@@ -54,7 +54,7 @@ const AddOrderForm = ({ fetchOrders, closeForm }) => {
               name="cusName"
               value={formData.cusName}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
@@ -65,7 +65,7 @@ const AddOrderForm = ({ fetchOrders, closeForm }) => {
               name="cusAddress"
               value={formData.cusAddress}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
@@ -76,7 +76,7 @@ const AddOrderForm = ({ fetchOrders, closeForm }) => {
               name="cusPhone"
               value={formData.cusPhone}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
@@ -87,7 +87,7 @@ const AddOrderForm = ({ fetchOrders, closeForm }) => {
               name="orderUnit"
               value={formData.orderUnit}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
@@ -97,7 +97,7 @@ const AddOrderForm = ({ fetchOrders, closeForm }) => {
               selected={formData.dateDelivery}
               onChange={handleDateChange}
               dateFormat="dd/MM/yyyy"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
