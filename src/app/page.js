@@ -1,70 +1,75 @@
-"use client";
-
-import React, { useEffect, useState } from 'react';
+"use client"
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import OrderTable from './components/OrderTable';
-import OrderProgress from './components/OrderProgress';
-import AddOrderForm from './components/AddOrderForm';
-import { PlusIcon } from '@heroicons/react/24/solid';
-import moment from 'moment';
+import Link from 'next/link';
+import { FaClipboardList } from 'react-icons/fa';
 
-const Home = () => {
+export default function IndexPage() {
   const [orders, setOrders] = useState([]);
-  const [error, setError] = useState('');
-  const [isFormOpen, setIsFormOpen] = useState(false);
-
-  const fetchOrders = async () => {
-    try {
-      const response = await axios.get('https://restapi-tjap.onrender.com/api/orders', {
-        timeout: 20000,
-      });
-      setOrders(response.data);
-    } catch (error) {
-      console.error('Error fetching orders:', error.message);
-      setError('Error fetching orders. Please try again later.');
-    }
-  };
+  const [pendingCount, setPendingCount] = useState(0);
+  const [successCount, setSuccessCount] = useState(0);
+  const [pendingUnits, setPendingUnits] = useState(0);
+  const [successUnits, setSuccessUnits] = useState(0);
 
   useEffect(() => {
-    fetchOrders();
-    const interval = setInterval(fetchOrders, 60000);
+    async function fetchOrders() {
+      try {
+        const response = await axios.get('https://restapi-tjap.onrender.com/api/orders');
+        setOrders(response.data);
+        calculateCounts(response.data);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+    }
 
-    return () => clearInterval(interval);
+    fetchOrders();
   }, []);
 
-  const convertThaiDateToGregorian = (thaiDate) => {
-    const [day, month, year] = thaiDate.split('/').map(Number);
-    return moment(`${day}/${month}/${year - 543}`, 'DD/MM/YYYY');
+  const calculateCounts = (orders) => {
+    let pendingCount = 0;
+    let successCount = 0;
+    let pendingUnits = 0;
+    let successUnits = 0;
+
+    orders.forEach(order => {
+      if (order.orderStatus === 'Pending') {
+        pendingCount++;
+        pendingUnits += order.orderUnit;
+      } else if (order.orderStatus === 'Success') {
+        successCount++;
+        successUnits += order.orderUnit;
+      }
+    });
+
+    setPendingCount(pendingCount);
+    setSuccessCount(successCount);
+    setPendingUnits(pendingUnits);
+    setSuccessUnits(successUnits);
   };
 
-  const pendingOrders = orders?.filter(order => order.orderStatus === 'Pending') || [];
-  const successOrdersCount = orders?.filter(order => order.orderStatus === 'Success').length || 0;
-  const totalOrdersCount = orders?.length || 0;
-
   return (
-    <div className="container mx-auto p-4 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6 text-center">Order Management Dashboard</h1>
-      {error && <div className="text-red-500 mb-4">{error}</div>}
-
-      <div className="flex flex-col md:flex-row md:space-x-4">
-        <OrderProgress orders={orders} />
-        <div className="mt-4 md:mt-0 md:flex-1">
-          <OrderTable orders={pendingOrders} fetchOrders={fetchOrders} />
-          <div className="flex justify-center mt-4">
-            <button 
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full flex items-center"
-              onClick={() => setIsFormOpen(true)}
-            >
-              <PlusIcon className="h-6 w-6 mr-2" />
-              Add New Order
-            </button>
-          </div>
+    <div className="container mx-auto p-8">
+      <h1 className="text-4xl font-extrabold my-8 text-center text-gray-800">Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white p-6 shadow-lg rounded-lg transform transition duration-500 hover:scale-105">
+          <h2 className="text-2xl font-bold mb-2">Pending Orders</h2>
+          <p className="text-lg">Number of Orders: {pendingCount}</p>
+          <p className="text-lg">Total Units: {pendingUnits}</p>
+        </div>
+        <div className="bg-gradient-to-r from-green-400 to-green-500 text-white p-6 shadow-lg rounded-lg transform transition duration-500 hover:scale-105">
+          <h2 className="text-2xl font-bold mb-2">Success Orders</h2>
+          <p className="text-lg">Number of Orders: {successCount}</p>
+          <p className="text-lg">Total Units: {successUnits}</p>
         </div>
       </div>
-
-      {isFormOpen && <AddOrderForm fetchOrders={fetchOrders} closeForm={() => setIsFormOpen(false)} />}
+      <div className="flex justify-center mt-12">
+        <Link href="/orders" passHref>
+          <button className="bg-blue-500 text-white py-3 px-6 rounded-full flex items-center justify-center shadow-lg transform transition duration-500 hover:scale-110 hover:bg-blue-700">
+            <FaClipboardList className="text-3xl mr-2" />
+            <span className="text-xl">View Orders</span>
+          </button>
+        </Link>
+      </div>
     </div>
   );
-};
-
-export default Home;
+}

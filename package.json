@@ -1,5 +1,5 @@
 {
-  "name": "order-management-frontend",
+  "name": "demo",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,21 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@heroicons/react": "^2.1.3",
     "axios": "^1.7.2",
-    "moment": "^2.30.1",
+    "express": "^4.19.2",
     "next": "14.2.3",
     "react": "^18",
-    "react-circular-progressbar": "^2.1.0",
-    "react-datepicker": "^6.9.0",
     "react-dom": "^18",
-    "react-modal": "^3.16.1"
+    "react-icons": "^5.2.1"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.19",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.3"
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1"
   }
 }
