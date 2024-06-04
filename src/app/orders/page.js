@@ -196,7 +196,7 @@ export default function OrdersPage() {
             </div>
             <div className="flex items-center mb-2">
               <FaTruck className="text-gray-500 mr-2" />
-              <p className="text-gray-700">Delivery: {order.dateDelivery}</p>
+              <p className="text-gray-700">{order.dateDelivery}</p>
             </div>
             <p className={`text-lg font-bold mt-2 ${order.orderStatus === 'Pending' ? 'text-yellow-500' : 'text-green-500'}`}>
               {order.orderStatus}
