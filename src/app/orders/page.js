@@ -202,17 +202,33 @@ export default function OrdersPage() {
               {order.orderStatus}
             </p>
             <div className="flex justify-end space-x-2 mt-4">
-              <a href={`tel:${order.cusPhone}`} className="text-blue-500 hover">
-                <FaPhone />
+              <a
+                href={`tel:${order.cusPhone}`}
+                className="text-blue-500 p-2 rounded-full bg-blue-100 hover:bg-blue-200"
+                title="Call Customer"
+              >
+                <FaPhone className="text-2xl" />
               </a>
-              <button onClick={() => handleUpdateStatus(order._id)} className="text-green-500 hover">
-                <FaCheck />
+              <button
+                onClick={() => handleUpdateStatus(order._id)}
+                className="text-green-500 p-2 rounded-full bg-green-100 hover:bg-green-200"
+                title="Update Status"
+              >
+                <FaCheck className="text-2xl" />
               </button>
-              <button onClick={() => handleEditClick(order)} className="text-blue-500 hover">
-                <FaEdit />
+              <button
+                onClick={() => handleEditClick(order)}
+                className="text-blue-500 p-2 rounded-full bg-blue-100 hover:bg-blue-200"
+                title="Edit Order"
+              >
+                <FaEdit className="text-2xl" />
               </button>
-              <button onClick={() => handleDeleteOrder(order._id)} className="text-red-500 hover">
-                <FaTrash />
+              <button
+                onClick={() => handleDeleteOrder(order._id)}
+                className="text-red-500 p-2 rounded-full bg-red-100 hover:bg-red-200"
+                title="Delete Order"
+              >
+                <FaTrash className="text-2xl" />
               </button>
             </div>
           </div>
@@ -221,4 +237,3 @@ export default function OrdersPage() {
     </div>
   );
 }
-
