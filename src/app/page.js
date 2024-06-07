@@ -4,48 +4,26 @@ import axios from 'axios';
 import Link from 'next/link';
 import { FaClipboardList } from 'react-icons/fa';
 
-export default function IndexPage() {
-  const [orders, setOrders] = useState([]);
-  const [pendingCount, setPendingCount] = useState(0);
-  const [successCount, setSuccessCount] = useState(0);
-  const [pendingUnits, setPendingUnits] = useState(0);
-  const [successUnits, setSuccessUnits] = useState(0);
+export default function Home() {
+  const [dashboardStats, setDashboardStats] = useState({
+    pendingOrdersCount: 0,
+    successOrdersCount: 0,
+    pendingUnitsCount: 0,
+    successUnitsCount: 0,
+  });
 
   useEffect(() => {
-    async function fetchOrders() {
+    async function fetchDashboardStats() {
       try {
-        const response = await axios.get('https://restapi-tjap.onrender.com/api/orders');
-        setOrders(response.data);
-        calculateCounts(response.data);
+        const response = await axios.get('https://restapi-tjap.onrender.com/api/orders/dashboard/stats');
+        setDashboardStats(response.data);
       } catch (error) {
-        console.error('Error fetching orders:', error);
+        console.error('Error fetching dashboard stats:', error);
       }
     }
 
-    fetchOrders();
+    fetchDashboardStats();
   }, []);
-
-  const calculateCounts = (orders) => {
-    let pendingCount = 0;
-    let successCount = 0;
-    let pendingUnits = 0;
-    let successUnits = 0;
-
-    orders.forEach(order => {
-      if (order.orderStatus === 'Pending') {
-        pendingCount++;
-        pendingUnits += order.orderUnit;
-      } else if (order.orderStatus === 'Success') {
-        successCount++;
-        successUnits += order.orderUnit;
-      }
-    });
-
-    setPendingCount(pendingCount);
-    setSuccessCount(successCount);
-    setPendingUnits(pendingUnits);
-    setSuccessUnits(successUnits);
-  };
 
   return (
     <div className="container mx-auto p-8">
@@ -53,13 +31,13 @@ export default function IndexPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white p-6 shadow-lg rounded-lg transform transition duration-500 hover:scale-105">
           <h2 className="text-2xl font-bold mb-2">Pending Orders</h2>
-          <p className="text-lg">Number of Orders: {pendingCount}</p>
-          <p className="text-lg">Total Units: {pendingUnits}</p>
+          <p className="text-lg">Number of Orders: {dashboardStats.pendingOrdersCount}</p>
+          <p className="text-lg">Total Units: {dashboardStats.pendingUnitsCount}</p>
         </div>
         <div className="bg-gradient-to-r from-green-400 to-green-500 text-white p-6 shadow-lg rounded-lg transform transition duration-500 hover:scale-105">
           <h2 className="text-2xl font-bold mb-2">Success Orders</h2>
-          <p className="text-lg">Number of Orders: {successCount}</p>
-          <p className="text-lg">Total Units: {successUnits}</p>
+          <p className="text-lg">Number of Orders: {dashboardStats.successOrdersCount}</p>
+          <p className="text-lg">Total Units: {dashboardStats.successUnitsCount}</p>
         </div>
       </div>
       <div className="flex justify-center mt-12">
