@@ -1,25 +1,30 @@
-"use client"
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { FaMapMarkerAlt, FaCheck, FaPhone, FaBox, FaTruck, FaPhoneAlt, FaTrash, FaEdit, FaPlus, FaArrowLeft } from 'react-icons/fa';
-import Link from 'next/link';
+"use client";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { FaMapMarkerAlt, FaCalendarAlt, FaBox, FaPhoneAlt, FaTrash, FaEdit, FaPlus, FaArrowLeft } from "react-icons/fa";
+import Link from "next/link";
+import AddOrderForm from "../add/page"; // Adjust the import path as necessary
+import EditOrderForm from "../edit/page"; // Adjust the import path as necessary
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isAdding, setIsAdding] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingOrder, setEditingOrder] = useState(null);
 
   useEffect(() => {
-    async function fetchOrders() {
-      try {
-        const response = await axios.get('https://restapi-tjap.onrender.com/api/orders');
-        setOrders(response.data);
-      } catch (error) {
-        console.error('Error fetching orders:', error);
-      }
-    }
-
     fetchOrders();
   }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get("https://restapi-tjap.onrender.com/api/orders");
+      setOrders(response.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
 
   const handleCall = (phone) => {
     window.open(`tel:${phone}`);
@@ -28,28 +33,41 @@ export default function OrdersPage() {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`https://restapi-tjap.onrender.com/api/orders/${id}`);
-      setOrders(orders.filter(order => order._id !== id));
+      setOrders(orders.filter((order) => order._id !== id));
     } catch (error) {
-      console.error('Error deleting order:', error);
+      console.error("Error deleting order:", error);
     }
   };
 
-  const handleEdit = (id) => {
-    // Redirect to edit order page
-    // Implement your edit order logic here
-    console.log(`Edit order with ID: ${id}`);
+  const handleEdit = (order) => {
+    setEditingOrder(order);
+    setIsEditing(true);
   };
 
-  const filteredOrders = orders.filter(order =>
-    order.cusName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.cusPhone.includes(searchTerm) ||
-    order.cusAddress.toLowerCase().includes(searchTerm.toLowerCase())
+  const handleAddOrder = () => {
+    setIsAdding(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditingOrder(null);
+  };
+
+  const handleCancelAdd = () => {
+    setIsAdding(false);
+  };
+
+  const filteredOrders = orders.filter(
+    (order) =>
+      order.cusName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.cusPhone.includes(searchTerm) ||
+      order.cusAddress.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-center text-4xl font-extrabold text-gray-800 mb-8">คำสั่งซื้อทั้งหมด</h1>
-      
+
       <div className="flex justify-between items-center mb-4">
         <input
           type="text"
@@ -58,11 +76,12 @@ export default function OrdersPage() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <Link href="/add-order">
-          <button className="bg-green-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-green-700">
-            <FaPlus />
-          </button>
-        </Link>
+        <button
+          onClick={handleAddOrder}
+          className="bg-green-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-green-700"
+        >
+          <FaPlus />
+        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -73,42 +92,53 @@ export default function OrdersPage() {
               <FaMapMarkerAlt className="inline-block mr-2" /> {order.cusAddress}
             </p>
             <p className="text-gray-700 mb-1">
-              <FaBox className="inline-block mr-2" /> {order.orderUnit} ชุด
+              <FaBox               className="inline-block mr-2" /> จำนวนชุด: {order.orderUnit}
             </p>
             <p className="text-gray-700 mb-1">
-              <FaTruck className="inline-block mr-2" /> {order.dateDelivery}
+              <FaCalendarAlt className="inline-block mr-2" /> วันที่ส่ง: {order.dateDelivery}
             </p>
-            <p className="text-gray-700">
-              {order.orderStatus === 'Pending' ? (
-                <span className="text-yellow-500">Pending</span>
-              ) : (
-                <span className="text-green-500">Success</span>
-              )}
+            <p className="text-gray-700 mb-1">
+              <FaPhoneAlt className="inline-block mr-2" /> {order.cusPhone}
             </p>
-            <div className="flex space-x-2 mt-4">
-              <button onClick={() => handleCall(order.cusPhone)} className="bg-blue-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-blue-700">
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={() => handleCall(order.cusPhone)}
+                className="bg-blue-500 text-white p-2 rounded-lg shadow-lg mr-2 transform transition duration-300 hover:scale-105 hover:bg-blue-700"
+              >
                 <FaPhoneAlt />
               </button>
-              {order.orderStatus !== 'Success' && (
-                <button onClick={() => handleComplete(order._id)} className="bg-green-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-green-700">
-                  <FaCheck />
-                </button>
-              )}
-              <button onClick={() => handleDelete(order._id)} className="bg-red-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-red-700">
-                <FaTrash />
-              </button>
-              <button onClick={() => handleEdit(order._id)} className="bg-yellow-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-yellow-700">
+              <button
+                onClick={() => handleEdit(order)}
+                className="bg-yellow-500 text-white p-2 rounded-lg shadow-lg mr-2 transform transition duration-300 hover:scale-105 hover:bg-yellow-700"
+              >
                 <FaEdit />
+              </button>
+              <button
+                onClick={() => handleDelete(order._id)}
+                className="bg-red-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-red-700"
+              >
+                <FaTrash />
               </button>
             </div>
           </div>
         ))}
       </div>
-      <Link href="/">
-        <button className="fixed bottom-8 left-8 bg-gray-500 text-white p-3 rounded-full shadow-lg transform transition duration-300 hover:scale-105 hover:bg-gray-700">
-          <FaArrowLeft />
-        </button>
-      </Link>
+
+      {isEditing && (
+        <EditOrderForm
+          order={editingOrder}
+          onCancelEdit={handleCancelEdit}
+          onOrderUpdated={fetchOrders} // Fetch orders to update the list after editing
+        />
+      )}
+
+      {isAdding && (
+        <AddOrderForm
+          onCancelAdd={handleCancelAdd}
+          onOrderAdded={fetchOrders} // Fetch orders to update the list after adding
+        />
+      )}
     </div>
   );
 }
+
