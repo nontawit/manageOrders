@@ -72,9 +72,9 @@ function DashboardCard({ title, totalOrders, totalUnits, color, icon }) {
     <div className={`bg-${color}-500 text-white p-6 rounded-lg shadow-lg flex items-center justify-between cursor-pointer transform transition duration-300 hover:scale-105 hover:bg-${color}-600`}>
       <div>
         {icon}
-        <h2 className="text-2xl font-bold">{title}</h2>
-        <p>คำสั่งซื้อ: {totalOrders}</p>
-        <p>จำนวนชุด: {totalUnits}</p>
+        <h2 className="text-3xl font-bold">{title}</h2>
+        <p className='text-xl'>คำสั่งซื้อ: {totalOrders}</p>
+        <p className='text-xl'>จำนวนชุด: {totalUnits}</p>
       </div>
       <FaArrowRight className="text-3xl" />
     </div>
