@@ -4,14 +4,14 @@ import axios from 'axios';
 import { FaMapMarkerAlt, FaPhone, FaBox, FaTruck, FaPhoneAlt, FaCheck, FaTrash, FaEdit, FaPlus, FaArrowLeft } from 'react-icons/fa';
 import Link from 'next/link';
 
-export default function OrdersPage() {
+export default function PendingOrdersPage() {
   const [orders, setOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     async function fetchOrders() {
       try {
-        const response = await axios.get('https://restapi-tjap.onrender.com/api/orders');
+        const response = await axios.get('https://restapi-tjap.onrender.com/api/orders?status=pending');
         setOrders(response.data);
       } catch (error) {
         console.error('Error fetching orders:', error);
@@ -57,7 +57,7 @@ export default function OrdersPage() {
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className="text-4xl font-extrabold text-gray-800 mb-8">All Orders</h1>
+      <h1 className="text-4xl font-extrabold text-gray-800 mb-8">Pending Orders</h1>
       
       <div className="flex justify-between items-center mb-4">
         <input

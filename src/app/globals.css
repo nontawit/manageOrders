@@ -2,3 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'SukhumvitSet';
+    src: url('../font/SukhumvitSet.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#body{
+    font-family: 'SukhumvitSet';
+}
