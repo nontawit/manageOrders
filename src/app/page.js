@@ -1,6 +1,7 @@
 "use client"
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { FaArrowRight, FaClipboardList, FaCheckCircle, FaShoppingCart } from 'react-icons/fa';
 
 export default function Dashboard() {
@@ -47,6 +48,7 @@ export default function Dashboard() {
           totalUnits={pendingUnitsCount} 
           color="yellow"
           icon={<FaClipboardList className="text-4xl mb-2" />} 
+          link = "/pending"
         />
         <DashboardCard 
           title="เสร็จสิ้น" 
@@ -54,6 +56,7 @@ export default function Dashboard() {
           totalUnits={successUnitsCount} 
           color="green"
           icon={<FaCheckCircle className="text-4xl mb-2" />} 
+          link = "/success"
         />
         <DashboardCard 
           title="คำสั่งซื้อทั้งหมด" 
@@ -61,22 +64,24 @@ export default function Dashboard() {
           totalUnits={pendingUnitsCount + successUnitsCount} 
           color="blue"
           icon={<FaShoppingCart className="text-4xl mb-2" />} 
+          link = "/orders"
         />
       </div>
     </div>
   );
+ 
 }
 
-function DashboardCard({ title, totalOrders, totalUnits, color, icon }) {
+function DashboardCard({ title, totalOrders, totalUnits, color, icon, link }) {
   return (
-    <div className={`bg-${color}-500 text-white p-6 rounded-lg shadow-lg flex items-center justify-between cursor-pointer transform transition duration-300 hover:scale-105 hover:bg-${color}-600`}>
-      <div>
-        {icon}
-        <h2 className="text-3xl font-bold">{title}</h2>
-        <p className='text-xl'>คำสั่งซื้อ: {totalOrders}</p>
-        <p className='text-xl'>จำนวนชุด: {totalUnits}</p>
-      </div>
-      <FaArrowRight className="text-3xl" />
-    </div>
+      <a href={link} className={`bg-${color}-500 text-white p-6 rounded-lg shadow-lg flex items-center justify-between cursor-pointer transform transition duration-300 hover:scale-105 hover:bg-${color}-600`}>
+        <div>
+          {icon}
+          <h2 className="text-3xl font-bold">{title}</h2>
+          <p className='text-xl'>ทั้งหมด: {totalOrders} ออเดอร์</p>
+          <p className='text-xl'>จำนวน: {totalUnits} ชุด</p>
+        </div>
+        <FaArrowRight className="text-3xl" />
+      </a>
   );
 }

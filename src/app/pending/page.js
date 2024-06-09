@@ -1,4 +1,5 @@
 "use client"
+"use client"
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaMapMarkerAlt, FaPhone, FaBox, FaTruck, FaPhoneAlt, FaCheck, FaTrash, FaEdit, FaPlus, FaArrowLeft } from 'react-icons/fa';
@@ -9,17 +10,27 @@ export default function PendingOrdersPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    async function fetchOrders() {
-      try {
-        const response = await axios.get('https://restapi-tjap.onrender.com/api/orders?status=pending');
-        setOrders(response.data);
-      } catch (error) {
-        console.error('Error fetching orders:', error);
-      }
+    const cachedData = localStorage.getItem('pendingOrders');
+    if (cachedData) {
+      setOrders(JSON.parse(cachedData));
+    } else {
+      fetchPendingOrders();
     }
-
-    fetchOrders();
   }, []);
+
+  const fetchPendingOrders = async () => {
+    try {
+      const response = await axios.get('https://restapi-tjap.onrender.com/api/orders/status/pending', {
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
+      setOrders(response.data);
+      localStorage.setItem('pendingOrders', JSON.stringify(response.data));
+    } catch (error) {
+      console.error('Error fetching pending orders:', error);
+    }
+  };
 
   const handleCall = (phone) => {
     window.open(`tel:${phone}`);
@@ -27,8 +38,10 @@ export default function PendingOrdersPage() {
 
   const handleComplete = async (id) => {
     try {
-      await axios.put(`https://restapi-tjap.onrender.com/api/orders/${id}`, { status: 'success' });
-      setOrders(orders.map(order => order._id === id ? { ...order, status: 'success' } : order));
+      await axios.put(`https://restapi-tjap.onrender.com/api/orders/${id}`, { orderStatus: 'Success' });
+      setOrders(orders.filter(order => order._id !== id));
+      // Update cached data after completing an order
+      localStorage.setItem('pendingOrders', JSON.stringify(orders.filter(order => order._id !== id)));
     } catch (error) {
       console.error('Error completing order:', error);
     }
@@ -38,26 +51,26 @@ export default function PendingOrdersPage() {
     try {
       await axios.delete(`https://restapi-tjap.onrender.com/api/orders/${id}`);
       setOrders(orders.filter(order => order._id !== id));
+      // Update cached data after deleting an order
+      localStorage.setItem('pendingOrders', JSON.stringify(orders.filter(order => order._id !== id)));
     } catch (error) {
       console.error('Error deleting order:', error);
     }
   };
 
   const handleEdit = (id) => {
-    // Redirect to edit order page
-    // Implement your edit order logic here
     console.log(`Edit order with ID: ${id}`);
   };
 
-  const filteredOrders = orders.filter(order =>
+  const filteredOrders = orders.filter(order => order.orderStatus === 'Pending' && (
     order.cusName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     order.cusPhone.includes(searchTerm) ||
     order.cusAddress.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ));
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className="text-4xl font-extrabold text-gray-800 mb-8">Pending Orders</h1>
+      <h1 className=" text-center text-4xl font-extrabold text-gray-800 mb-8">Pending Orders</h1>
       
       <div className="flex justify-between items-center mb-4">
         <input
@@ -82,13 +95,17 @@ export default function PendingOrdersPage() {
               <FaMapMarkerAlt className="inline-block mr-2" /> {order.cusAddress}
             </p>
             <p className="text-gray-700 mb-1">
-              <FaPhone className="inline-block mr-2" /> {order.cusPhone}
+              <FaBox className="inline-block mr-2" /> {order.orderUnit} ชุด
             </p>
             <p className="text-gray-700 mb-1">
-              <FaBox className="inline-block mr-2" /> {order.orderUnit} Units
+              <FaTruck className="inline-block mr-2" /> {order.dateDelivery}
             </p>
             <p className="text-gray-700">
-              <FaTruck className="inline-block mr-2" /> {order.dateDelivery}
+              {order.orderStatus === 'Pending' ? (
+                <span className="text-yellow-500">Pending</span>
+              ) : (
+                <span className="text-green-500">Success</span>
+              )}
             </p>
             <div className="flex space-x-2 mt-4">
               <button onClick={() => handleCall(order.cusPhone)} className="bg-blue-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-blue-700">
