@@ -70,7 +70,7 @@ export default function PendingOrdersPage() {
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className=" text-center text-4xl font-extrabold text-gray-800 mb-8">Pending Orders</h1>
+      <h1 className=" text-center text-4xl font-extrabold text-gray-800 mb-8">คำสั่งซื้อที่รอดำเนินการ</h1>
       
       <div className="flex justify-between items-center mb-4">
         <input

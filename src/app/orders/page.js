@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaMapMarkerAlt, FaPhone, FaBox, FaTruck, FaPhoneAlt, FaCheck, FaTrash, FaEdit, FaPlus, FaArrowLeft } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaCheck, FaPhone, FaBox, FaTruck, FaPhoneAlt, FaTrash, FaEdit, FaPlus, FaArrowLeft } from 'react-icons/fa';
 import Link from 'next/link';
 
 export default function OrdersPage() {
@@ -23,15 +23,6 @@ export default function OrdersPage() {
 
   const handleCall = (phone) => {
     window.open(`tel:${phone}`);
-  };
-
-  const handleComplete = async (id) => {
-    try {
-      await axios.put(`https://restapi-tjap.onrender.com/api/orders/${id}`, { status: 'success' });
-      setOrders(orders.map(order => order._id === id ? { ...order, status: 'success' } : order));
-    } catch (error) {
-      console.error('Error completing order:', error);
-    }
   };
 
   const handleDelete = async (id) => {
@@ -57,7 +48,7 @@ export default function OrdersPage() {
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className="text-4xl font-extrabold text-gray-800 mb-8">All Orders</h1>
+      <h1 className="text-center text-4xl font-extrabold text-gray-800 mb-8">คำสั่งซื้อทั้งหมด</h1>
       
       <div className="flex justify-between items-center mb-4">
         <input
@@ -82,21 +73,27 @@ export default function OrdersPage() {
               <FaMapMarkerAlt className="inline-block mr-2" /> {order.cusAddress}
             </p>
             <p className="text-gray-700 mb-1">
-              <FaPhone className="inline-block mr-2" /> {order.cusPhone}
+              <FaBox className="inline-block mr-2" /> {order.orderUnit} ชุด
             </p>
             <p className="text-gray-700 mb-1">
-              <FaBox className="inline-block mr-2" /> {order.orderUnit} Units
+              <FaTruck className="inline-block mr-2" /> {order.dateDelivery}
             </p>
             <p className="text-gray-700">
-              <FaTruck className="inline-block mr-2" /> {order.dateDelivery}
+              {order.orderStatus === 'Pending' ? (
+                <span className="text-yellow-500">Pending</span>
+              ) : (
+                <span className="text-green-500">Success</span>
+              )}
             </p>
             <div className="flex space-x-2 mt-4">
               <button onClick={() => handleCall(order.cusPhone)} className="bg-blue-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-blue-700">
                 <FaPhoneAlt />
               </button>
-              <button onClick={() => handleComplete(order._id)} className="bg-green-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-green-700">
-                <FaCheck />
-              </button>
+              {order.orderStatus !== 'Success' && (
+                <button onClick={() => handleComplete(order._id)} className="bg-green-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-green-700">
+                  <FaCheck />
+                </button>
+              )}
               <button onClick={() => handleDelete(order._id)} className="bg-red-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-red-700">
                 <FaTrash />
               </button>

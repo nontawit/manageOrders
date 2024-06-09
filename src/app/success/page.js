@@ -11,7 +11,7 @@ export default function SuccessOrdersPage() {
   useEffect(() => {
     async function fetchOrders() {
       try {
-        const response = await axios.get('https://restapi-tjap.onrender.com/api/orders?status=success');
+        const response = await axios.get('https://restapi-tjap.onrender.com/api/orders/status/success');
         setOrders(response.data);
       } catch (error) {
         console.error('Error fetching orders:', error);
@@ -25,15 +25,6 @@ export default function SuccessOrdersPage() {
     window.open(`tel:${phone}`);
   };
 
-  const handleComplete = async (id) => {
-    try {
-      await axios.put(`https://restapi-tjap.onrender.com/api/orders/${id}`, { status: 'completed' });
-      setOrders(orders.map(order => order._id === id ? { ...order, status: 'completed' } : order));
-    } catch (error) {
-      console.error('Error completing order:', error);
-    }
-  };
-
   const handleDelete = async (id) => {
     try {
       await axios.delete(`https://restapi-tjap.onrender.com/api/orders/${id}`);
@@ -44,8 +35,6 @@ export default function SuccessOrdersPage() {
   };
 
   const handleEdit = (id) => {
-    // Redirect to edit order page
-    // Implement your edit order logic here
     console.log(`Edit order with ID: ${id}`);
   };
 
@@ -57,7 +46,7 @@ export default function SuccessOrdersPage() {
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className="text-4xl font-extrabold text-gray-800 mb-8">Success Orders</h1>
+      <h1 className=" text-center text-4xl font-extrabold text-gray-800 mb-8">คำสั่งซื้อที่เสร็จสิ้น</h1>
       
       <div className="flex justify-between items-center mb-4">
         <input
@@ -82,20 +71,21 @@ export default function SuccessOrdersPage() {
               <FaMapMarkerAlt className="inline-block mr-2" /> {order.cusAddress}
             </p>
             <p className="text-gray-700 mb-1">
-              <FaPhone className="inline-block mr-2" /> {order.cusPhone}
+              <FaBox className="inline-block mr-2" /> {order.orderUnit} ชุด
             </p>
-            <p className="text-gray-700 mb-1">
-              <FaBox className="inline-block mr-2" /> {order.orderUnit} Units
+            <p className="text-gray-700" mb-1>
+              <FaTruck className="inline-block mr-2" /> {order.dateDelivery}
             </p>
             <p className="text-gray-700">
-              <FaTruck className="inline-block mr-2" /> {order.dateDelivery}
+              {order.orderStatus === 'Pending' ? (
+                <span className="text-yellow-500">Pending</span>
+              ) : (
+                <span className="text-green-500">Success</span>
+              )}
             </p>
             <div className="flex space-x-2 mt-4">
               <button onClick={() => handleCall(order.cusPhone)} className="bg-blue-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-blue-700">
                 <FaPhoneAlt />
-              </button>
-              <button onClick={() => handleComplete(order._id)} className="bg-green-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-green-700">
-                <FaCheck />
               </button>
               <button onClick={() => handleDelete(order._id)} className="bg-red-500 text-white p-2 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:bg-red-700">
                 <FaTrash />
